@@ -1,0 +1,17 @@
+fileFormatVersion: 2
+guid: 26bc329d0255f364682a94cd5cb0fb5b
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences:
+  - cameraa: {instanceID: 0}
+  - TrueCell: {fileID: 2548506407366289198, guid: f3ca82d364c7939459fe287d3b05123a, type: 3}
+  - FalseCell: {fileID: 7410761179354157617, guid: 71c914adaa7b9774b8e573d5ebedff8c, type: 3}
+  - NeutralCell: {fileID: 3982070063619351215, guid: 044df4880486b5547b4aad7d87cdee3a, type: 3}
+  - StartCell: {fileID: 3458068479423807159, guid: 38ecb6dda3d785e4ea4952ef97e76c64, type: 3}
+  - FinishCell: {fileID: 1076783089748564349, guid: 77877cb1e4f383b4299f414ecd993be7, type: 3}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
