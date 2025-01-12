@@ -5,8 +5,6 @@ using UnityEngine;
 
 public class Maze_Generator : MonoBehaviour
 {
-    camera cameraa;
-    Players players; 
     Parameters parameter;  
     Game game;
     public GameObject TrueCell;    //0
@@ -19,11 +17,14 @@ public class Maze_Generator : MonoBehaviour
     public int[,] playermaze;
     public int sf;
     public int sc;
+    public int ef;
+    public int ec;
     /*
     LEYENDA:
     -1     paredes
     -5     inicio
     -10    puntas
+    -20    final
     */        
     public void Maze(int large)
     {
@@ -39,13 +40,30 @@ public class Maze_Generator : MonoBehaviour
                 intmaze[a, b] = -1;
             }
         }
-        sf = Random.Range(1, large - 1);
-        if (sf % 2 == 0) sf--;
-
-        sc = Random.Range(1, large - 1);
-        if (sc % 2 == 0) sc--;
-
-        intmaze[sf, sc] = -5;                 //casilla de inicio (aleatoria)                  
+        int swall = Random.Range(0,4);                  //pared de inicio
+        int nswall = Random.Range(1,large - 1);         //casilla de la pared para iniciar (par)
+        if (nswall % 2 == 0) nswall--;
+        if (swall == 0)       //empieza abajo
+        {
+            sf = 1;
+            sc = nswall;
+        }
+        if (swall == 1)       //empieza arriba
+        {
+            sf = large - 2;
+            sc = nswall;
+        }
+        if (swall == 2)       //empieza a la izquierda
+        {
+            sf = nswall;
+            sc = 1;
+        }
+        if (swall == 3)       //empieza a la derecha
+        {
+            sf = nswall;
+            sc = large - 2;
+        }
+        intmaze[sf, sc] = -5;                 //casilla de inicio                  
         makingWays(sf, sc);
         Puntas(intmaze);
         PlayerMaze(sf, sc);
@@ -172,6 +190,8 @@ public class Maze_Generator : MonoBehaviour
             }
         }
         intmaze[maxf, maxc] = -20;
+        ef = maxf;
+        ec = maxc;
         return intmaze;
     }
     public void printCells()
