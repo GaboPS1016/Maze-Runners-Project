@@ -4,10 +4,12 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using TMPro;
 using UnityEngine.UIElements;
+using System.Collections;
 
 public class Parameters : MonoBehaviour
 {
     public PlayerSelect playerselect;
+    public Pdescription textos;
     public int numPlayers;
     public bool numPlayersChange;    
     public List<GameObject> Playerpos;
@@ -22,40 +24,29 @@ public class Parameters : MonoBehaviour
     public GameObject x4;       
     public void leftBottom(int index)                   //cambiar de personaje a la izquierda sin repetir
     {
-        bool pass = false;
-        p[index]--;
-        if (p[index] < 0)
-        {
-            p[index] = AllPlayers.Count - 1;            
-        }
-        while (!pass)
-        {
-            pass = true;
-            for (int i = 0; i < p.Count; i++)
-            {
-                if (p[index] == p[i] && index != i)
-                {
-                    p[index]--;
-                    if (p[index] < 0)
-                    {
-                        p[index] = AllPlayers.Count - 1;            
-                    }  
-                    pass = false;
-                    break;
-                }
-            }
-        }             
-        change = index;
+        StartCoroutine(PSelection(index, -1));
     }
 
     public void rightBottom(int index)                      //cambiar de personaje a la derecha sin repetir
     {
+        StartCoroutine(PSelection(index, 1));
+    }
+    IEnumerator PSelection(int index, int direction)
+    {
+        yield return new WaitForEndOfFrame();
         bool pass = false;
-        p[index]++;
-        if (p[index] > AllPlayers.Count - 1)
+        if(direction < 0)
         {
-            p[index] = 0;
+            p[index]--;
+            if (p[index] < 0) p[index] = AllPlayers.Count - 1;
         }
+        else
+        {
+            p[index]++;
+            if (p[index] > AllPlayers.Count - 1) p[index] = 0;
+        }
+        if (p[index] < 0) p[index] = AllPlayers.Count - 1;  
+        if (p[index] > AllPlayers.Count - 1) p[index] = 0;
         while (!pass)
         {
             pass = true;
@@ -63,17 +54,18 @@ public class Parameters : MonoBehaviour
             {
                 if (p[index] == p[i] && index != i)
                 {
-                    p[index]++;
-                    if (p[index] > AllPlayers.Count - 1)
-                    {
-                        p[index] = 0;
-                    }  
+                    p[index] += direction;
+                    if (p[index] < 0) p[index] = AllPlayers.Count - 1; 
+                    if (p[index] > AllPlayers.Count - 1) p[index] = 0; 
                     pass = false;
                     break;
                 }
             }
         }        
-        change = index;
+        Playerpos[index].transform.position = new Vector3 (250,0,1);
+        Playerpos[index] = AllPlayers[p[index]];
+        Playerpos[index].transform.position = PlayerVector[index];
+        infoplayer[index].text = textos.pStrings[p[index]];     
     }
     public void HandleInputData(int value)          //dropdown de numeros
     {
@@ -138,6 +130,7 @@ public class Parameters : MonoBehaviour
                 PlayerVector.Add(new Vector3 (Playerpos[0].transform.position.x, Playerpos[0].transform.position.y, 1));
                 Playerpos[0] = AllPlayers[p[0]];   
                 Playerpos[0].transform.position = PlayerVector[0];             
+                infoplayer[0].text = textos.pStrings[p[0]];     
             }            
             if (numPlayers >= 2) 
             {
@@ -146,7 +139,8 @@ public class Parameters : MonoBehaviour
                 Playerpos.Add(GameObject.Find("playerpos2"));
                 PlayerVector.Add(new Vector3 (Playerpos[1].transform.position.x, Playerpos[1].transform.position.y, 1));
                 Playerpos[1] = AllPlayers[p[1]];  
-                Playerpos[1].transform.position = PlayerVector[1];              
+                Playerpos[1].transform.position = PlayerVector[1];     
+                infoplayer[1].text = textos.pStrings[p[1]];              
             } 
             if (numPlayers >= 3) 
             {
@@ -155,7 +149,8 @@ public class Parameters : MonoBehaviour
                 Playerpos.Add(GameObject.Find("playerpos3"));
                 PlayerVector.Add(new Vector3 (Playerpos[2].transform.position.x, Playerpos[2].transform.position.y, 1));
                 Playerpos[2] = AllPlayers[p[2]];     
-                Playerpos[2].transform.position = PlayerVector[2];           
+                Playerpos[2].transform.position = PlayerVector[2];   
+                infoplayer[2].text = textos.pStrings[p[2]];             
             } 
             if (numPlayers == 4) 
             {
@@ -164,17 +159,9 @@ public class Parameters : MonoBehaviour
                 Playerpos.Add(GameObject.Find("playerpos4"));
                 PlayerVector.Add(new Vector3 (Playerpos[3].transform.position.x, Playerpos[3].transform.position.y, 1));
                 Playerpos[3] = AllPlayers[p[3]];  
-                Playerpos[3].transform.position = PlayerVector[3];              
+                Playerpos[3].transform.position = PlayerVector[3];    
+                infoplayer[3].text = textos.pStrings[p[3]];               
             }
-        }
-        //si se presiona boton izquierdo o derecho
-        if (change != 10)
-        {               
-            Playerpos[change].transform.position = new Vector3 (250,0,1);
-            Playerpos[change] = AllPlayers[p[change]];
-            Playerpos[change].transform.position = PlayerVector[change];
-            infoplayer[change].text = "";
-            change = 10;
-        }                
+        }        
     }    
 }
