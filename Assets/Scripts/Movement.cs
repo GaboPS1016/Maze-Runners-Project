@@ -19,12 +19,12 @@ public class Movement : MonoBehaviour
     public int index;
     public int fcellselected;
     public int ccellselected;
-    public int player;
+    public GameObject player;
     public Vector3 playerpos;
     public float playerspeed = 5f;
     public IEnumerator Move(int dado)
     {
-        playerpos = game.players[player].transform.position;
+        playerpos = player.transform.position;
         int fil = (int)playerpos.y;
         int col = (int)playerpos.x;
         int efil = maze.ff;
@@ -60,6 +60,7 @@ public class Movement : MonoBehaviour
         }
         if (posiblemoves.Count == 0) 
         {
+            game.InfoText.text = "No tienes movimientos disponibles";
             game.playerMoved = true;
             yield break;
         }                 //sin jugadas
@@ -103,14 +104,15 @@ public class Movement : MonoBehaviour
             col = c;
             Vector3 nextPosition = new Vector3(c + 0.5f, f + 0.5f, 1f);
 
-            Transform playerTransform = game.players[player].transform;
+            Transform playerTransform = player.transform;
             playerTransform.position = nextPosition;
             yield return new WaitForSeconds(0.5f);
         }
         traps.Penalizations();
-        if ((int)game.players[player].transform.position.y == efil && (int)game.players[player].transform.position.x == ecol)
+        if ((int)player.transform.position.y == efil && (int)player.transform.position.x == ecol)
         {
             game.gameFinished = true;
+            game.InfoText.text = "Encontraste la Gema de la Fortuna";
         }    
         game.playerMoved = true;
     }

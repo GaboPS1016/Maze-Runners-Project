@@ -1367,7 +1367,7 @@ GameObject:
   - component: {fileID: 625634591}
   - component: {fileID: 625634590}
   m_Layer: 0
-  m_Name: Estilista
+  m_Name: Maga
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1837,7 +1837,7 @@ GameObject:
   - component: {fileID: 796706445}
   - component: {fileID: 796706444}
   m_Layer: 0
-  m_Name: "Barb\xF3n"
+  m_Name: Mercenario
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

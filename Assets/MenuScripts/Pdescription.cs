@@ -10,7 +10,7 @@ public class Pdescription : MonoBehaviour
         string s0 = "Fumador        ";
         string s1 = "Misterioso     ";
         string s2 = "Bateador       ";
-        string s3 = "Estilista      ";
+        string s3 = "Maga           ";
         string s4 = "Mercenario     ";
         string s5 = "Skater         ";
         string s6 = "Cyborg         ";
