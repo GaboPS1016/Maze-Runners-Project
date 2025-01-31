@@ -13,7 +13,7 @@ public class CameraControl : MonoBehaviour
     public GameObject player;
     public Vector3 playerpos;
     public float camspeed = 1f;
-    public float playerspeed = 1f;
+    public float playerspeed;
     
     void Start()
     {
@@ -21,12 +21,13 @@ public class CameraControl : MonoBehaviour
         maincamera.GetComponent<Camera>().enabled = false;    
         playercamera.GetComponent<Camera>().enabled = true;
         player.transform.position = new Vector3(game.sf + 0.5f, game.sc + 0.5f, 1);
+        playerspeed = 1f;
     }
     void FixedUpdate()
     {
         playerpos = player.transform.position;
         playercamera.transform.position = Vector3.Lerp(player.transform.position,playerpos, camspeed);
-        if (Input.GetKeyDown("1"))
+        /*if (Input.GetKeyDown("1"))                                                    //Libertad de movimientoo para hacer pruebas
         {
             maincamera.GetComponent<Camera>().enabled = true;
             playercamera.GetComponent<Camera>().enabled = false;
@@ -56,6 +57,6 @@ public class CameraControl : MonoBehaviour
         {
             playerpos = new Vector3(playerpos.x - 1, playerpos.y, playerpos.z);
             player.transform.position = Vector3.Lerp(player.transform.position,playerpos, playerspeed);
-        }
+        }*/
     }
 }
