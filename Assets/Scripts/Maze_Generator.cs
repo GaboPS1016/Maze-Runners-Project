@@ -21,6 +21,7 @@ public class Maze_Generator : MonoBehaviour
     public int fc;
     /*
     LEYENDA:
+    0      camino valido
     -1     paredes
     -5     inicio
     -10    puntas
@@ -69,8 +70,7 @@ public class Maze_Generator : MonoBehaviour
         PlayerMaze(sf, sc);
         End();
         printCells();                        
-    }  
-   
+    }    
     public void makingWays(int f, int c)
     {
         boolmaze[f, c] = true;

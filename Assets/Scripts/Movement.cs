@@ -21,7 +21,6 @@ public class Movement : MonoBehaviour
     public int ccellselected;
     public GameObject player;
     public Vector3 playerpos;
-    public float playerspeed = 5f;
     public IEnumerator Move(int dado)
     {
         playerpos = player.transform.position;
@@ -34,12 +33,6 @@ public class Movement : MonoBehaviour
         playermaze = maze.PlayerMaze(fil,col);
         intmaze = maze.intmaze;
         MoveCell.GetComponent<SpriteRenderer>().enabled = true;
-        if (playermaze[efil, ecol] < dado)
-        {
-            posiblemoves.Add(new int[] {efil,ecol});                                  
-            GameObject FinalMoveCellClone = Instantiate(MoveCell, new Vector3((float)(0.5+ecol),(float)(0.5+efil),5), Quaternion.identity);
-            posiblecells.Add(FinalMoveCellClone);
-        }
         for (int f = 0; f < maze.large; f++)
         {
             for (int c = 0; c < maze.large; c++)
@@ -47,9 +40,7 @@ public class Movement : MonoBehaviour
                 if (playermaze[f,c] == dado && game.intmaze[f,c] != 60) //no se puede caer en una piedra
                 {
                     if(traps.TestingLog(fil, col, f, c, dado))              //no se puede pasar por despues de un tronco  
-                    
-                    {
-                        Debug.Log("tronco!!!");        
+                    {      
                         continue;
                     }           
                     posiblemoves.Add(new int[] {f,c});                                  //casillas azules a las que se puede mover con el valor del dado                     
@@ -95,20 +86,26 @@ public class Movement : MonoBehaviour
 
         }
         way.Reverse();                                         //Invirtiendo para conseguir el camino    
-        for (int step = 0; step < way.Count; step++)
+        for (int step = 0; step < way.Count; step++)            //Caminando por casillas
         {
             int[] x = way[step];
             int f = x[0];
             int c = x[1];
             fil = f;
-            col = c;
+            col = c;            
+            float playerspeed = 5f;
             Vector3 nextPosition = new Vector3(c + 0.5f, f + 0.5f, 1f);
 
-            Transform playerTransform = player.transform;
-            playerTransform.position = nextPosition;
-            yield return new WaitForSeconds(0.5f);
-        }
-        traps.Penalizations();
+            while (Vector3.Distance(player.transform.position, nextPosition) > 0.01f)
+            {
+                player.transform.position = Vector3.MoveTowards(player.transform.position, nextPosition, playerspeed * Time.deltaTime);
+                yield return null;
+            }
+            player.transform.position = nextPosition;
+        }        
+        playerpos = player.transform.position; 
+        if (game.intmaze[(int)playerpos.y, (int)playerpos.x] != 0) game.newdice = false;
+        traps.Penalizations();       
         if ((int)player.transform.position.y == efil && (int)player.transform.position.x == ecol)
         {
             game.gameFinished = true;

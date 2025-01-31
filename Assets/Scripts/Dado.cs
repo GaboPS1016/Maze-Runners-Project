@@ -11,12 +11,14 @@ public class Dado : MonoBehaviour
     public GameObject dado;
     public Sprite[] diceFaces;
     public bool throwDice = false;
+    public AudioSource diceSound;
     public void OnMouseDown()                                   //Lanzar el dado al hacer clic sobre el
     {
         if (throwDice) StartCoroutine(dice());       
     }
     IEnumerator dice()
     {
+        diceSound.Play();
         int value = 1;
         for (int i = 0; i < 10; i++)                                    //Animacion de 10 Valores aleatorios para simular el lanzamiento
         {

@@ -12,7 +12,16 @@ public class Traps : MonoBehaviour
     public List<int> numtraps;
     public List<GameObject> spritetraps;
     public int percent = 5;
+    public GameObject exp;                  //bloque de prueba
+    public GameObject ven;                  //bloque de prueba
     public GameObject player;
+    public AudioSource expSound;
+    public AudioSource btSound;
+    public AudioSource portalSound;
+    public AudioSource poiSound;
+    public AudioSource logSound;
+    public AudioSource fireSound;
+    public AudioSource spikesSound;
     public void MakingTraps()
     {
         
@@ -32,6 +41,8 @@ public class Traps : MonoBehaviour
                     if (game.intmaze[f,c] == 0 && rand <= percent)
                     {
                         game.intmaze[f,c] = numtraps[i];
+                        //if (i == 6) Instantiate(exp, new Vector3(c + 0.5f, f + 0.5f, 4), Quaternion.identity);
+                        
                         if (i == 6 || i == 7) continue;
                         GameObject t = Instantiate(spritetraps[i], new Vector3(c + 0.5f, f + 0.5f, 4), Quaternion.identity);
                         if (game.intmaze[f,c] == 50) game.logs.Add(t);
@@ -44,6 +55,17 @@ public class Traps : MonoBehaviour
     {
         int f = (int)moves.player.transform.position.y;
         int c = (int)moves.player.transform.position.x;
+        if (game.intmaze[f, c] == 50)                       //tronco
+        {
+            BreakLog(f, c);
+            game.InfoText.text = "Has talado el tronco";
+        }               
+        else if (game.intmaze[f, c] == 40)                       //portal
+        {
+            Portal();
+            game.InfoText.text = "Has entrado a un portal";
+        }
+        if(game.inmunity) return; 
         if (game.intmaze[f, c] == 10)                           //pinchos
         {
             Spikes();
@@ -59,16 +81,6 @@ public class Traps : MonoBehaviour
             BearTrap();
             game.InfoText.text = "Has caído en una trampa para osos, te costará librate dos turnos";
         }
-        else if (game.intmaze[f, c] == 40)                       //portal
-        {
-            Portal();
-            game.InfoText.text = "Has entrado a un portal";
-        }
-        else if (game.intmaze[f, c] == 50)                       //tronco
-        {
-            BreakLog(f, c);
-            game.InfoText.text = "Has talado el tronco";
-        }               
         else if (game.intmaze[f, c] == 70)                       //explosion
         {
             StartCoroutine(Explosion(f, c));           
@@ -77,16 +89,17 @@ public class Traps : MonoBehaviour
         {
             StartCoroutine(Poison(f, c));           
         }
-
     }
     public void Spikes()
     {
+        spikesSound.Play();
         game.playersInfo[game.iactual].damaged = true;
     }
     public void Fire(int f, int c)
     {
+        fireSound.Play();
         playermaze = maze.PlayerMaze(f, c);
-        game.players[game.p[game.iactual]].GetComponent<SpriteRenderer>().color = Color.black;
+        game.playersInfo[game.iactual].player.GetComponent<SpriteRenderer>().color = Color.black;
         game.playersInfo[game.iactual].burning = 3;
         for (int fil = 1; fil < game.large - 2; fil++)
         {
@@ -99,7 +112,7 @@ public class Traps : MonoBehaviour
                     {
                         if (playermaze[fil, col] == n && Random.Range(0,100) >= 85)
                         {
-                            game.players[game.p[game.iactual]].transform.position = new Vector3(col + 0.5f, fil + 0.5f, 1);
+                            game.players[game.iactual].transform.position = new Vector3(col + 0.5f, fil + 0.5f, 1);
                             Penalizations();
                             return;
                         }
@@ -112,6 +125,7 @@ public class Traps : MonoBehaviour
     }
     public void BearTrap()
     {
+        btSound.Play();
         game.playersInfo[game.iactual].sleepTime += 2;
     }
     public void Portal()
@@ -124,6 +138,7 @@ public class Traps : MonoBehaviour
                 {
                     if(game.intmaze[f,c] == 0 && Random.Range(0,100) <= 30)
                     {
+                        portalSound.Play();
                         player.transform.position = new Vector3(c + 0.5f, f + 0.5f, 1);
                         return;
                     }	
@@ -159,7 +174,6 @@ public class Traps : MonoBehaviour
     }
     public void BreakLog(int f, int c)
     {
-        Debug.Log("rompiendo el tronco");
         for (int i = 0; i < game.logs.Count; i++)
         {
             GameObject x = game.logs[i];
@@ -167,6 +181,7 @@ public class Traps : MonoBehaviour
             int cx = (int)x.transform.position.x;
             if (f == fx && c == cx) 
             {
+                logSound.Play();
                 Destroy(x);
                 game.logs.RemoveAt(i);
             }            
@@ -179,24 +194,26 @@ public class Traps : MonoBehaviour
     }
     public IEnumerator Explosion(int f, int c)
     {
+
         List<int> afected = new List<int>();
         playermaze = maze.PlayerMaze(f, c);
-        for (int fil = 1; fil < game.large - 2; fil++)
+        for (int fil = 1; fil < game.large - 1; fil++)
         {
-            for (int col = 1; col < game.large - 2; col++)
+            for (int col = 1; col < game.large - 1; col++)
             {
                 if (playermaze[fil, col] == 0 || playermaze[fil, col] == 1 || playermaze[fil, col] == 2)
                 {
                     for (int i = 0; i < game.numPlayers; i++)
                     {
-                        if ((int)game.players[game.p[i]].transform.position.y == fil && (int)game.players[game.p[i]].transform.position.x == col) 
+                        if ((int)game.players[i].transform.position.y == fil && (int)game.players[i].transform.position.x == col) 
                         {
-                            afected.Add(game.p[i]);
+                            afected.Add(i);
                         }
                     }
                 }
             }
         }
+        expSound.Play();
         GameObject explosionAnim = Instantiate(spritetraps[6], new Vector3(c + 0.5f, f + 0.5f, 4), Quaternion.identity);
         game.InfoText.text = "Bombaa!!, tú y los jugadores cercanos han reaparecido en la casilla de salida";
         yield return new WaitForSeconds(1.9f);          //tiempo de la animacion
@@ -211,15 +228,16 @@ public class Traps : MonoBehaviour
     public IEnumerator Poison(int f, int c)
     {
         playermaze = maze.PlayerMaze(f, c);
-        for (int fil = 1; fil < game.large - 2; fil++)
+        for (int fil = 1; fil < game.large - 1; fil++)
         {
-            for (int col = 1; col < game.large - 2; col++)
+            for (int col = 1; col < game.large - 1; col++)
             {
                 if (playermaze[fil, col] == 0 || playermaze[fil, col] == 1 || playermaze[fil, col] == 2)
                 {
                     for (int i = 0; i < game.numPlayers; i++)
                     {
-                        if ((int)game.players[game.p[i]].transform.position.y == fil && (int)game.players[game.p[i]].transform.position.x == col) 
+                        GameObject currentPlayer = game.players[i];
+                        if ((int)currentPlayer.transform.position.y == fil && (int)currentPlayer.transform.position.x == col) 
                         {
                             game.playersInfo[i].timeToSpecial += 3;
                         }
@@ -227,6 +245,7 @@ public class Traps : MonoBehaviour
                 }
             }
         }
+        poiSound.Play();
         GameObject poisonAnim = Instantiate(spritetraps[7], new Vector3(c + 0.5f, f + 0.5f, 4), Quaternion.identity);
         game.InfoText.text = "Veneno!!, tu habilidad especial y la de jugadores cercanos demorará en cargarse 3 turnos más";
         yield return new WaitForSeconds(3.2f);          //tiempo de la animacion

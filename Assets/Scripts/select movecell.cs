@@ -19,7 +19,6 @@ public class selectmovecell : MonoBehaviour
                 Collider2D colli = cells[i].GetComponent<Collider2D>();
                 if (colli.OverlapPoint(mouse))
                 {
-                    Debug.Log("tocaste f:" + (int)mouse.y + ", c:" + (int)mouse.x);
                     movement.fcellselected = (int)mouse.y;
                     movement.ccellselected = (int)mouse.x; 
                     movement.cellselected = true;
