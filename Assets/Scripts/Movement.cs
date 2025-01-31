@@ -16,6 +16,7 @@ public class Movement : MonoBehaviour
     public GameObject MoveCell;
     public bool cellselected = false;
     public bool timetomove = false;
+    public bool antilogs = false;
     public int index;
     public int fcellselected;
     public int ccellselected;
@@ -39,7 +40,7 @@ public class Movement : MonoBehaviour
             {
                 if (playermaze[f,c] == dado && game.intmaze[f,c] != 60) //no se puede caer en una piedra
                 {
-                    if(traps.TestingLog(fil, col, f, c, dado))              //no se puede pasar por despues de un tronco  
+                    if(traps.TestingLog(fil, col, f, c, dado) && !antilogs)              //no se puede pasar por despues de un tronco  
                     {      
                         continue;
                     }           
@@ -105,7 +106,8 @@ public class Movement : MonoBehaviour
         }        
         playerpos = player.transform.position; 
         if (game.intmaze[(int)playerpos.y, (int)playerpos.x] != 0) game.newdice = false;
-        traps.Penalizations();       
+        traps.Penalizations();  
+        antilogs = false;     
         if ((int)player.transform.position.y == efil && (int)player.transform.position.x == ecol)
         {
             game.gameFinished = true;

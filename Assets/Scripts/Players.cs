@@ -238,6 +238,7 @@ namespace Playerspace
             move.posiblecells.Clear();
             move.MoveCell.gameObject.SetActive(true);
             move.MoveCell.GetComponent<SpriteRenderer>().enabled = true;
+            move.antilogs = true;
             move.timetomove = true;
         }
     }
