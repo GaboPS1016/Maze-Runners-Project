@@ -38,6 +38,7 @@ public class CameraControl : MonoBehaviour
             playercamera.GetComponent<Camera>().enabled = true;
             
         }
+        /*
         if (Input.GetKeyDown("w"))
         {
             playerpos = new Vector3(playerpos.x, playerpos.y + 1, playerpos.z);

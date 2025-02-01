@@ -104,7 +104,7 @@ namespace Playerspace
         public Bateador() : base(0,4) 
         {
             timeToSpecial = rechargeTime;
-            Ability = "Lanza bolas y aturde a los jugadores que se encuentren en su fila y columna actual, ";
+            Ability = "Lanza bolas y aturde a los jugadores que se encuentren en su fila y columna actual.";
         }
         public void Initialize(Game gameInstance, selectmovecell selectInstance, Maze_Generator mazeInstance, Movement moveInstance, GameObject playersFolder)
         {
