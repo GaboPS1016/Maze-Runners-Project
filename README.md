@@ -8,6 +8,7 @@
  La escena 1 es la Información del juego, ahí se explica la temática.
  En la escena 2 se elige el número de jugadores, y se asignan los jugadores.
  La escena 3 es el laberinto, y es donde se juega. Es la que utiliza la mayoría de los scripts.
+ Para descargar el ejecutable debe descomprimir los 6 archivos Maze Runners.rar a la vez, y abrir Gema de la Fortuna.exe.
 
  Expliación de los scripts principales:
   1. MazeGenerator.cs: Genera el laberinto a partir de una matriz de booleanos y una matriz de enteros, en este se implementa el método PlayerMaze(f,c), que mediante el algoritmo de Lee genera una matriz de enteros enumerando a cuantos pasos queda cada casilla desde una determinadda posición.
