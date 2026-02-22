@@ -38,12 +38,12 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0, g: 0, b: 0, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
   m_ObjectHideFlags: 0
-  serializedVersion: 12
+  serializedVersion: 13
+  m_BakeOnSceneLoad: 0
   m_GISettings:
     serializedVersion: 2
     m_BounceScale: 1
@@ -637,6 +637,45 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bc4486eec5db0ba46a79c93c4c9854c4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  home: {fileID: 342326215}
+  door: {fileID: 342326215}
+  cancel: {fileID: 342326215}
+  muter: {fileID: 342326215}
+  muteon: {fileID: 9195250375225370209, guid: 24cde075455aa9f4eb0fdc23073e0095, type: 3}
+  muteoff: {fileID: 5075274813154910940, guid: 408701772c3ac204daba272275ea7713, type: 3}
+  music: {fileID: 894834897}
+  isMute: 0
+--- !u!1 &342326215
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 342326216}
+  m_Layer: 0
+  m_Name: GameObject
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &342326216
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 342326215}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 155.3, y: -21.8, z: -11.24948}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &490013736
 GameObject:
   m_ObjectHideFlags: 0
@@ -1100,6 +1139,11 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 16465a8ee64302447941f582df7b0891, type: 3}
+--- !u!82 &894834897 stripped
+AudioSource:
+  m_CorrespondingSourceObject: {fileID: 4022076654116814265, guid: 16465a8ee64302447941f582df7b0891, type: 3}
+  m_PrefabInstance: {fileID: 894834896}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1277981467
 GameObject:
   m_ObjectHideFlags: 0
@@ -1853,3 +1897,4 @@ SceneRoots:
   - {fileID: 324908870}
   - {fileID: 1744696292}
   - {fileID: 894834896}
+  - {fileID: 342326216}

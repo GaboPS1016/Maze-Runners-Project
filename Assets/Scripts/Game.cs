@@ -90,11 +90,12 @@ public class Game : MonoBehaviour
                 if (newdice) diceThrown = true;
                 else dice.throwDice = true;
                 yield return new WaitUntil(() => diceThrown);
+                
                 diceThrown = false;
                 dice.throwDice = false;
                 if (playersInfo[i].damaged) 
                 {
-                    InfoText.text = "Estás herido, este turno caminarás 1 casilla";
+                    InfoText.text = "Estás herido, en este turno caminarás 1 casilla";
                     diceResult = 1;
                     playersInfo[i].damaged = false;
                 }
@@ -106,6 +107,7 @@ public class Game : MonoBehaviour
                 if (playersInfo[i].timeToSpecial == 0) abilityAvaiable = true;
                 movement.timetomove = true;
                 yield return new WaitUntil(() => playerMoved);
+
                 abilityAvaiable = false;
                 playerMoved = false;
                 if (repeatTurn)

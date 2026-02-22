@@ -67,7 +67,7 @@ namespace Playerspace
                 int playerf = (int)game.players[i].transform.position.y;
                 int playerc = (int)game.players[i].transform.position.x;
             
-                if (playermaze[playerf, playerc] <= 2)
+                if (playermaze[playerf, playerc] <= 5)
                 {
                     playersAffected.Add(i);
                     game.playersInfo[i].timeToSpecial += 3;
@@ -78,7 +78,6 @@ namespace Playerspace
     }
     public class Misterioso : Players
     {    
-        
         public Misterioso() : base(0,3) 
         {
             timeToSpecial = rechargeTime;
@@ -101,7 +100,7 @@ namespace Playerspace
     }
     public class Bateador : Players
     {    
-        public Bateador() : base(0,4) 
+        public Bateador() : base(0,5) 
         {
             timeToSpecial = rechargeTime;
             Ability = "Lanza bolas y aturde a los jugadores que se encuentren en su fila y columna actual.";
@@ -125,7 +124,7 @@ namespace Playerspace
     }
     public class Maga : Players
     {    
-        public Maga() : base(0,5) 
+        public Maga() : base(0,7) 
         {
             timeToSpecial = rechargeTime;
             Ability = "Desaparece y aparece en la posición de un jugador aleatorio, su mejor truco de magia.";
@@ -191,7 +190,7 @@ namespace Playerspace
     }
     public class Mercenario : Players
     {    
-        public Mercenario() : base(0,4) 
+        public Mercenario() : base(0,3) 
         {
             timeToSpecial = rechargeTime;
             Ability = "No recibirá la penalización de la trampa en la que caiga.";
@@ -309,7 +308,7 @@ namespace Playerspace
                 int playerf = (int)game.players[i].transform.position.y;
                 int playerc = (int)game.players[i].transform.position.x;
             
-                if (playermaze[playerf, playerc] <= 2)
+                if (playermaze[playerf, playerc] <= 5)
                 {
                     playersAffected.Add(i);
                     game.playersInfo[i].sleepTime += 3;

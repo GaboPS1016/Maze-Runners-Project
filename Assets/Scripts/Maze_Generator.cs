@@ -69,7 +69,8 @@ public class Maze_Generator : MonoBehaviour
         Puntas(intmaze);
         PlayerMaze(sf, sc);
         End();
-        printCells();                        
+        printCells();      
+        QuitarPuntas(intmaze);                  
     }    
     public void makingWays(int f, int c)
     {
@@ -99,7 +100,7 @@ public class Maze_Generator : MonoBehaviour
             }
         }            
     }
-    public int[,] Puntas(int[,] intmaze)                                                    //extremos del laberinto
+    public void Puntas(int[,] intmaze)                                                    //extremos del laberinto
     {
         List<int[]> noexits = new List<int[]> { };            
         int[] df = { 1, -1, 0, 0 };
@@ -126,7 +127,6 @@ public class Maze_Generator : MonoBehaviour
                 }
             }
         }
-        return intmaze;
     }
     public int[,] PlayerMaze( int sf, int sc)                                //Algoritmo de Lee
     {
@@ -169,7 +169,7 @@ public class Maze_Generator : MonoBehaviour
         playermaze[sf,sc] = 0; 
         return playermaze;
     }        
-    public int[,] End()
+    public void End()
     {
         int max = 0;
         int maxf = 0;
@@ -192,7 +192,16 @@ public class Maze_Generator : MonoBehaviour
         intmaze[maxf, maxc] = -20;
         ff = maxf;
         fc = maxc;
-        return intmaze;
+    }
+    public void QuitarPuntas(int[,] intmaze)                                                    //extremos del laberinto
+    {
+        for (int f = 0; f < large; f++)
+        {
+            for (int c = 0; c < large; c++)
+            {
+                if (intmaze[f, c] == -10 || intmaze[f, c] == -5) intmaze[f, c] = 0;
+            }
+        }
     }
     public void printCells()
     {

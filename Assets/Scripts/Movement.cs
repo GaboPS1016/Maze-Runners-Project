@@ -105,7 +105,7 @@ public class Movement : MonoBehaviour
             player.transform.position = nextPosition;
         }        
         playerpos = player.transform.position; 
-        if (game.intmaze[(int)playerpos.y, (int)playerpos.x] != 0) game.newdice = false;
+        if (game.intmaze[(int)playerpos.y, (int)playerpos.x] != 0 && game.intmaze[(int)playerpos.y, (int)playerpos.x] != 50) game.newdice = false;
         traps.Penalizations();  
         antilogs = false;     
         if ((int)player.transform.position.y == efil && (int)player.transform.position.x == ecol)

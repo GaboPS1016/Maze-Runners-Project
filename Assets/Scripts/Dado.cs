@@ -18,6 +18,7 @@ public class Dado : MonoBehaviour
     }
     IEnumerator dice()
     {
+        game.dice.throwDice = false;
         diceSound.Play();
         int value = 1;
         for (int i = 0; i < 10; i++)                                    //Animacion de 10 Valores aleatorios para simular el lanzamiento
