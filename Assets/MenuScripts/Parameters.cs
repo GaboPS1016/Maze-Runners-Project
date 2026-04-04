@@ -3,13 +3,14 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using TMPro;
-using UnityEngine.UIElements;
+using UnityEngine.UI;
 using System.Collections;
 
 public class Parameters : MonoBehaviour
 {
     public PlayerSelect playerselect;
     public Pdescription textos;
+    public bool multicaminos;
     public int numPlayers;
     public bool numPlayersChange;    
     public List<GameObject> Playerpos;
@@ -21,7 +22,23 @@ public class Parameters : MonoBehaviour
     public GameObject Players;
     public GameObject x2;
     public GameObject x3;
-    public GameObject x4;       
+    public GameObject x4;
+    public GameObject[] infopannels;
+    public GameObject b1;
+    public GameObject b2;
+    public GameObject b3;
+    public GameObject b4;
+    public List<TextMeshProUGUI> inftexts;
+    public Toggle TogMulticaminos;
+    public void OnValueChanged(bool estado)
+    {
+        multicaminos = estado;
+    }
+    public void playerinfo(int num)
+    {
+        if (infopannels[num].gameObject.activeSelf) infopannels[num].SetActive(false);
+        else infopannels[num].SetActive(true);
+    }
     public void leftBottom(int index)                   //cambiar de personaje a la izquierda sin repetir
     {
         StartCoroutine(PSelection(index, -1));
@@ -34,6 +51,7 @@ public class Parameters : MonoBehaviour
     IEnumerator PSelection(int index, int direction)
     {
         yield return new WaitForEndOfFrame();
+        infopannels[index].SetActive(false);
         bool pass = false;
         if(direction < 0)
         {
@@ -65,7 +83,8 @@ public class Parameters : MonoBehaviour
         Playerpos[index].transform.position = new Vector3 (250,0,1);
         Playerpos[index] = AllPlayers[p[index]];
         Playerpos[index].transform.position = PlayerVector[index];
-        infoplayer[index].text = textos.pStrings[p[index]];     
+        infoplayer[index].text = textos.pStrings[p[index]];   
+        inftexts[index].text = textos.infStrings[p[index]];     
     }
     public void HandleInputData(int value)          //dropdown de numeros
     {
@@ -78,6 +97,7 @@ public class Parameters : MonoBehaviour
     }  
     public void Jugar()                         //pasar parametros al script puente y empezar el juego
     {
+        playerselect.multicaminos = multicaminos;
         playerselect.p = p;
         playerselect.numPlayers = numPlayers;
         GameObject ps = GameObject.Find("PlayerSelect");
@@ -86,6 +106,7 @@ public class Parameters : MonoBehaviour
     }   
     void Start()
     {
+        multicaminos = false;
         numPlayers = 1;
         x2 = GameObject.Find("2");
         x3 = GameObject.Find("3");
@@ -129,8 +150,9 @@ public class Parameters : MonoBehaviour
                 Playerpos.Add(GameObject.Find("playerpos1"));                
                 PlayerVector.Add(new Vector3 (Playerpos[0].transform.position.x, Playerpos[0].transform.position.y, 1));
                 Playerpos[0] = AllPlayers[p[0]];   
-                Playerpos[0].transform.position = PlayerVector[0];             
-                infoplayer[0].text = textos.pStrings[p[0]];     
+                Playerpos[0].transform.position = PlayerVector[0];
+                infoplayer[0].text = textos.pStrings[p[0]];
+                inftexts[0].text = textos.infStrings[p[0]];   
             }            
             if (numPlayers >= 2) 
             {
@@ -139,8 +161,9 @@ public class Parameters : MonoBehaviour
                 Playerpos.Add(GameObject.Find("playerpos2"));
                 PlayerVector.Add(new Vector3 (Playerpos[1].transform.position.x, Playerpos[1].transform.position.y, 1));
                 Playerpos[1] = AllPlayers[p[1]];  
-                Playerpos[1].transform.position = PlayerVector[1];     
-                infoplayer[1].text = textos.pStrings[p[1]];              
+                Playerpos[1].transform.position = PlayerVector[1];
+                infoplayer[1].text = textos.pStrings[p[1]];    
+                inftexts[1].text = textos.infStrings[p[1]];          
             } 
             if (numPlayers >= 3) 
             {
@@ -149,8 +172,9 @@ public class Parameters : MonoBehaviour
                 Playerpos.Add(GameObject.Find("playerpos3"));
                 PlayerVector.Add(new Vector3 (Playerpos[2].transform.position.x, Playerpos[2].transform.position.y, 1));
                 Playerpos[2] = AllPlayers[p[2]];     
-                Playerpos[2].transform.position = PlayerVector[2];   
-                infoplayer[2].text = textos.pStrings[p[2]];             
+                Playerpos[2].transform.position = PlayerVector[2];
+                infoplayer[2].text = textos.pStrings[p[2]];    
+                inftexts[2].text = textos.infStrings[p[2]];          
             } 
             if (numPlayers == 4) 
             {
@@ -159,8 +183,9 @@ public class Parameters : MonoBehaviour
                 Playerpos.Add(GameObject.Find("playerpos4"));
                 PlayerVector.Add(new Vector3 (Playerpos[3].transform.position.x, Playerpos[3].transform.position.y, 1));
                 Playerpos[3] = AllPlayers[p[3]];  
-                Playerpos[3].transform.position = PlayerVector[3];    
-                infoplayer[3].text = textos.pStrings[p[3]];               
+                Playerpos[3].transform.position = PlayerVector[3];
+                infoplayer[3].text = textos.pStrings[p[3]];    
+                inftexts[3].text = textos.infStrings[p[3]];            
             }
         }        
     }    

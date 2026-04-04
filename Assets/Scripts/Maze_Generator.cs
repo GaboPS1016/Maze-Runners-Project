@@ -12,6 +12,7 @@ public class Maze_Generator : MonoBehaviour
     public GameObject StartCell;   //-5
     public GameObject FinishCell;   //-20     //gema
     public int large;                          //largo y alto del laberinto
+    public bool multiway;
     public bool[,] boolmaze;
     public int[,] intmaze;
     public int[,] playermaze;
@@ -29,10 +30,14 @@ public class Maze_Generator : MonoBehaviour
     */        
     public void Maze(int large)
     {
+        Debug.Log("entró en maze");  
         this.large = large;
         boolmaze = new bool[large, large];
         intmaze = new int[large, large];
         playermaze = new int[large, large];
+        //multiway = game.multiway;
+        multiway = PlayerSelect.Instance.multicaminos;
+        Debug.Log("mutiway esta en "+ multiway);     
         for (int a = 0; a < large; a++)
         {
             for (int b = 0; b < large; b++)
@@ -64,7 +69,8 @@ public class Maze_Generator : MonoBehaviour
             sf = large - 2;
             sc = nswall;
         }
-        intmaze[sf, sc] = -5;                 //casilla de inicio                  
+        intmaze[sf, sc] = -5;                 //casilla de inicio   
+        Debug.Log("entrando a makingways");         
         makingWays(sf, sc);
         Puntas(intmaze);
         PlayerMaze(sf, sc);
@@ -74,31 +80,38 @@ public class Maze_Generator : MonoBehaviour
     }    
     public void makingWays(int f, int c)
     {
+        Debug.Log("entró a makingways");     
         boolmaze[f, c] = true;
         if (intmaze[f, c] != -5) intmaze[f, c] = 0;
         //           N  S  E  O                 //direcciones
         int[] df = { 2, -2, 0, 0 };
-        int[] dc = { 0, 0, 2, -2 };            
+        int[] dc = { 0, 0, 2, -2 };
         List<int> dir = new List<int> { 0, 1, 2, 3 };            //lista del orden de cada direccion
         while (dir.Count > 0)
         {
             int randDir = Random.Range(0, dir.Count);
-            int moveDir = dir[randDir];            
+            int moveDir = dir[randDir];
             dir.RemoveAt(randDir);
 
             int movef = f + df[moveDir];
             int movec = c + dc[moveDir];
-            if (movef > 0 && movef < large - 1 && movec > 0 && movec < large - 1 && boolmaze[movef, movec] == false)
+            if (movef > 0 && movef < large - 1 && movec > 0 && movec < large - 1)
             {
-                boolmaze[movef, movec] = true;                                                  //validar camino
-                intmaze[movef, movec] = 0;
+                if (!boolmaze[movef, movec] || (multiway && Random.Range(0, 100) <= 5))
+                {
+                    bool stop = false;
+                    if (boolmaze[movef, movec]) stop = true;
+                    boolmaze[movef, movec] = true;                                                  //validar camino
+                    intmaze[movef, movec] = 0;
 
-                boolmaze[f + df[moveDir] / 2, c + dc[moveDir] / 2] = true;            //validar camino intermedio
-                intmaze[f + df[moveDir] / 2, c + dc[moveDir] / 2] = 0;
+                    boolmaze[f + df[moveDir] / 2, c + dc[moveDir] / 2] = true;            //validar camino intermedio
+                    intmaze[f + df[moveDir] / 2, c + dc[moveDir] / 2] = 0;
 
-                makingWays(movef, movec);
+                    if (stop) continue;
+                    makingWays(movef, movec);
+                }
             }
-        }            
+        }
     }
     public void Puntas(int[,] intmaze)                                                    //extremos del laberinto
     {
@@ -111,6 +124,7 @@ public class Maze_Generator : MonoBehaviour
             {
                 if (intmaze[f, c] == 0)
                 {
+                    if (f == sf && c == sc) continue;
                     int d = 0;
                     for (int dir = 0; dir < 4; dir++)
                     {

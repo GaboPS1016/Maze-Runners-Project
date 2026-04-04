@@ -243,7 +243,7 @@ namespace Playerspace
     }
     public class Cyborg : Players
     {    
-        public Cyborg() : base(0,5) 
+        public Cyborg() : base(0,6) 
         {
             timeToSpecial = rechargeTime;
             Ability = "Es capaz de teletransportarse a una posición segura aleatoria, perfecto para salir de atascos.";
@@ -285,7 +285,7 @@ namespace Playerspace
         public Trovador() : base(0,4) 
         {
             timeToSpecial = rechargeTime;
-            Ability = "Las notas de su guitarra hacen que los jugadores cercanos se duerman por 3 turnos.";
+            Ability = "Las notas de su guitarra hacen que los jugadores cercanos se duerman por 4 turnos.";
         }
         public void Initialize(Game gameInstance, selectmovecell selectInstance, Maze_Generator mazeInstance, Movement moveInstance, GameObject playersFolder)
         {
@@ -299,7 +299,6 @@ namespace Playerspace
             int f = (int)player.transform.position.y;
             int c = (int)player.transform.position.x;
             int[,] playermaze = maze.PlayerMaze(f, c);
-            List<int> playersAffected = new List<int>();
 
             for (int i = 0; i < game.numPlayers; i++)
             {
@@ -310,11 +309,68 @@ namespace Playerspace
             
                 if (playermaze[playerf, playerc] <= 5)
                 {
-                    playersAffected.Add(i);
                     game.playersInfo[i].sleepTime += 3;
                 }
             }
             game.InfoText.text = "Qué musica tan hermosa, dormiste a los oyentes.";
+        }
+    }
+    public class Asesino : Players
+    {    
+        public Asesino() : base(0,8) 
+        {
+            timeToSpecial = rechargeTime;
+            Ability = "Manda a los jugadores a tu lado, al inicio.";
+        }
+        public void Initialize(Game gameInstance, selectmovecell selectInstance, Maze_Generator mazeInstance, Movement moveInstance, GameObject playersFolder)
+        {
+            Initialize(gameInstance, selectInstance, mazeInstance, moveInstance);
+            PlayersFolder = playersFolder;
+            player = PlayersFolder.transform.GetChild(8).gameObject;
+        }
+        public override void special()
+        {
+            game.asesino.Play();
+            int f = (int)player.transform.position.y;
+            int c = (int)player.transform.position.x;
+            int[,] playermaze = maze.PlayerMaze(f, c);
+
+            for (int i = 0; i < game.numPlayers; i++)
+            {
+                if (i == game.iactual) continue;
+
+                int playerf = (int)game.players[i].transform.position.y;
+                int playerc = (int)game.players[i].transform.position.x;
+
+                if (playermaze[playerf, playerc] <= 1)
+                {
+                    game.players[i].transform.position = new Vector3(game.sc + 0.5f, game.sf + 0.5f, 1);
+                }
+                game.InfoText.text = "Mataste a los jugadores cercanos.";
+            }
+        }
+    }
+    public class Chamana : Players
+    {    
+        public Chamana() : base(0,2) 
+        {
+            timeToSpecial = rechargeTime;
+            Ability = "Te indica el camino más rápido a la gema.";
+        }
+        public void Initialize(Game gameInstance, selectmovecell selectInstance, Maze_Generator mazeInstance, Movement moveInstance, GameObject playersFolder)
+        {
+            Initialize(gameInstance, selectInstance, mazeInstance, moveInstance);
+            PlayersFolder = playersFolder;
+            player = PlayersFolder.transform.GetChild(9).gameObject;
+        }
+        public override void special()
+        {
+            game.chamana.Play();
+            int f = (int)player.transform.position.y;
+            int c = (int)player.transform.position.x;
+            int[,] playermaze = maze.PlayerMaze(game.ff, game.fc);
+            
+            game.InfoText.text = "Ya sabes por donde ir.";
         }
     }
 }

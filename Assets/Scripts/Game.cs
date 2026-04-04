@@ -18,6 +18,7 @@ public class Game : MonoBehaviour
     public bool[,] boolmaze;
     public Players[] playersInfo;
     public Maze_Generator maze;
+    public bool multiway;
     public int numPlayers;
     public List<GameObject> players;   
     public List<int> p;
@@ -42,7 +43,6 @@ public class Game : MonoBehaviour
     public TextMeshProUGUI playerTurnText;
     public TextMeshProUGUI InfoText;
     public TextMeshProUGUI VictoryText;
-    public List<GameObject> logs;
     public int iactual;
     public AudioSource maga;
     public AudioSource trovador;
@@ -52,6 +52,8 @@ public class Game : MonoBehaviour
     public AudioSource misterioso;
     public AudioSource skater;
     public AudioSource fumador;
+    public AudioSource asesino;
+    public AudioSource chamana;
     public void SpawnPlayers()
     {
         for (int i = 0; i < numPlayers; i++)
@@ -148,6 +150,8 @@ public class Game : MonoBehaviour
         endButton.gameObject.SetActive(false);
         pHolder = GameObject.Find("PlayerSelect");
         large = 25;
+        multiway = PlayerSelect.Instance.multicaminos;
+        Debug.Log("mutiway leido como "+ multiway);  
         maze.Maze(large);
         intmaze = maze.intmaze;
         boolmaze = maze.boolmaze;
@@ -155,7 +159,6 @@ public class Game : MonoBehaviour
         sc = maze.sc;
         ff = maze.ff;
         fc = maze.fc;
-        logs =new List<GameObject> ();
         traps.MakingTraps();
         numPlayers = PlayerSelect.Instance.numPlayers;
         p = PlayerSelect.Instance.p;
@@ -218,12 +221,26 @@ public class Game : MonoBehaviour
                 cyborg.player = players[i];
                 playersInfo[i] = cyborg;
             }
-            else
+            else if (p[i] == 7)
             {
                 var trovador = ScriptableObject.CreateInstance<Trovador>();
                 trovador.Initialize(this, selectmovecell, maze, movement, Players);
                 trovador.player = players[i];
                 playersInfo[i] = trovador;
+            }
+            else if (p[i] == 8)
+            {
+                var asesino = ScriptableObject.CreateInstance<Asesino>();
+                asesino.Initialize(this, selectmovecell, maze, movement, Players);
+                asesino.player = players[i];
+                playersInfo[i] = asesino;
+            }
+            else
+            {
+                var chamana = ScriptableObject.CreateInstance<Chamana>();
+                chamana.Initialize(this, selectmovecell, maze, movement, Players);
+                chamana.player = players[i];
+                playersInfo[i] = chamana;
             }          
         }
         startGame = true;      

@@ -1,3 +1,4 @@
+
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -11,6 +12,9 @@ public class Traps : MonoBehaviour
     public int[,] playermaze;
     public List<int> numtraps;
     public List<GameObject> spritetraps;
+    public List<GameObject> redportals;
+    public List<int[]> redportalspos;
+    public List<GameObject> logs;
     public int percent = 5;
     public GameObject exp;                  //bloque de prueba
     public GameObject ven;                  //bloque de prueba
@@ -25,18 +29,21 @@ public class Traps : MonoBehaviour
     public void MakingTraps()
     {
         
-        numtraps = new List<int> { 10, 20, 30, 40, 50, 60, 70, 80 };        //LEYENDA:   Sp, F, B, Port, L, R, E, P 
-        spritetraps = new List<GameObject> ();
+        numtraps = new List<int> { 10, 20, 30, 40, 50, 60, 70, 80, 90 };        //LEYENDA:   Sp, F, B, Port, L, R, E, P, RPort 
+        spritetraps = new List<GameObject>();
+        redportalspos = new List<int[]>();
         for ( int i = 0; i < numtraps.Count; i++ )
         {
             spritetraps.Add (TrapsFolder.transform.GetChild(i).gameObject);        //GameObjects de las trampas
         }
         for ( int i = 0; i < numtraps.Count; i++)
         {
+            if (i == 8) Debug.Log("turno del portal rojo");
             for (int f = 1; f < game.large - 1; f++)
             {
-                for (int c = 0; c < game.large - 1; c++)
+                for (int c = 1; c < game.large - 1; c++)
                 {
+                    if (f == game.sf && c == game.sc) continue;
                     int rand = Random.Range(0, 100);
                     if (game.intmaze[f,c] == 0 && rand <= percent)
                     {
@@ -45,7 +52,16 @@ public class Traps : MonoBehaviour
                         
                         if (i == 6 || i == 7) continue;
                         GameObject t = Instantiate(spritetraps[i], new Vector3(c + 0.5f, f + 0.5f, 4), Quaternion.identity);
-                        if (game.intmaze[f,c] == 50) game.logs.Add(t);
+                        if (i == 4) logs.Add(t);
+                        if (i == 8)
+                        {
+                            Debug.Log("entro al if del portal rojo");
+                            redportals.Add(t);
+                            Debug.Log("gameobject añadido");
+                            int[] pair = {f, c};
+                            redportalspos.Add(pair);
+                            Debug.Log("par del portal rojo puesto");
+                        } 
                     }
                 }
             }
@@ -65,7 +81,7 @@ public class Traps : MonoBehaviour
             Portal();
             game.InfoText.text = "Has entrado a un portal";
         }
-        if(game.inmunity) return; 
+        if(game.inmunity) return;
         if (game.intmaze[f, c] == 10)                           //pinchos
         {
             Spikes();
@@ -83,11 +99,16 @@ public class Traps : MonoBehaviour
         }
         else if (game.intmaze[f, c] == 70)                       //explosion
         {
-            StartCoroutine(Explosion(f, c));           
+            StartCoroutine(Explosion(f, c));
         }
         else if (game.intmaze[f, c] == 80)                       //veneno
         {
-            StartCoroutine(Poison(f, c));           
+            StartCoroutine(Poison(f, c));
+        }
+        else if (game.intmaze[f, c] == 90)                      //trampa para osos
+        {
+            RedPortal(f,c);
+            game.InfoText.text = "Has entrado a un portal rojo";
         }
     }
     public void Spikes()
@@ -174,16 +195,16 @@ public class Traps : MonoBehaviour
     }
     public void BreakLog(int f, int c)
     {
-        for (int i = 0; i < game.logs.Count; i++)
+        for (int i = 0; i < logs.Count; i++)
         {
-            GameObject x = game.logs[i];
+            GameObject x = logs[i];
             int fx = (int)x.transform.position.y;
             int cx = (int)x.transform.position.x;
             if (f == fx && c == cx) 
             {
                 logSound.Play();
                 Destroy(x);
-                game.logs.RemoveAt(i);
+                logs.RemoveAt(i);
             }            
         }
         game.intmaze[f,c] = 0;
@@ -191,6 +212,36 @@ public class Traps : MonoBehaviour
     public void Rock()
     {
         //Esta trampa no tiene codigo(Puesta en Movement)
+    }
+    public void RedPortal(int fp, int cp)
+    {
+        if (redportalspos.Count == 1)
+        {
+            Destroy(redportals[0]);
+            redportals.RemoveAt(0);
+            redportalspos.RemoveAt(0);
+            portalSound.Play();
+            return;
+        }
+        //Delete portal
+        for (int i = 0; i < redportals.Count; i++)
+        {
+            GameObject x = redportals[i];
+            int fx = (int)x.transform.position.y;
+            int cx = (int)x.transform.position.x;
+            if (fp == fx && cp == cx)
+            {
+                Destroy(redportals[i]);
+                redportals.RemoveAt(i);
+                redportalspos.RemoveAt(i);
+            }            
+        }
+        game.intmaze[fp, cp] = 0; 
+        //Teleport
+        int target = Random.Range(0, redportals.Count);
+        int[] rp = redportalspos[target];
+        portalSound.Play();
+        player.transform.position = new Vector3(rp[1] + 0.5f, rp[0] + 0.5f, 1);
     }
     public IEnumerator Explosion(int f, int c)
     {
