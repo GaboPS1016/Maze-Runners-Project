@@ -9,6 +9,7 @@ public class PlayerSelect : MonoBehaviour
     public int numPlayers;
     public List<int> p;
     public bool multicaminos;
+    public int large;
     void Start()                       //crear la referencia de objeto
     {
         Instance = this;

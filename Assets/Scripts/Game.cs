@@ -23,6 +23,9 @@ public class Game : MonoBehaviour
     public List<GameObject> players;   
     public List<int> p;
     public GameObject pHolder;
+    public List<GameObject> chamanamarcs;
+    public GameObject chamanaMarc;
+
     public int sf;
     public int sc;
     public int ff;
@@ -109,7 +112,11 @@ public class Game : MonoBehaviour
                 if (playersInfo[i].timeToSpecial == 0) abilityAvaiable = true;
                 movement.timetomove = true;
                 yield return new WaitUntil(() => playerMoved);
-
+                for (int u = 0; u < chamanamarcs.Count; u++)
+                {
+                    Destroy(chamanamarcs[u]);
+                }
+                chamanamarcs.Clear();
                 abilityAvaiable = false;
                 playerMoved = false;
                 if (repeatTurn)
@@ -149,9 +156,8 @@ public class Game : MonoBehaviour
     {
         endButton.gameObject.SetActive(false);
         pHolder = GameObject.Find("PlayerSelect");
-        large = 25;
+        large = PlayerSelect.Instance.large;
         multiway = PlayerSelect.Instance.multicaminos;
-        Debug.Log("mutiway leido como "+ multiway);  
         maze.Maze(large);
         intmaze = maze.intmaze;
         boolmaze = maze.boolmaze;

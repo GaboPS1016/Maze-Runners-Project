@@ -30,14 +30,11 @@ public class Maze_Generator : MonoBehaviour
     */        
     public void Maze(int large)
     {
-        Debug.Log("entró en maze");  
         this.large = large;
         boolmaze = new bool[large, large];
         intmaze = new int[large, large];
         playermaze = new int[large, large];
-        //multiway = game.multiway;
-        multiway = PlayerSelect.Instance.multicaminos;
-        Debug.Log("mutiway esta en "+ multiway);     
+        multiway = PlayerSelect.Instance.multicaminos;   
         for (int a = 0; a < large; a++)
         {
             for (int b = 0; b < large; b++)
@@ -79,8 +76,7 @@ public class Maze_Generator : MonoBehaviour
         QuitarPuntas(intmaze);                  
     }    
     public void makingWays(int f, int c)
-    {
-        Debug.Log("entró a makingways");     
+    {   
         boolmaze[f, c] = true;
         if (intmaze[f, c] != -5) intmaze[f, c] = 0;
         //           N  S  E  O                 //direcciones
@@ -188,21 +184,23 @@ public class Maze_Generator : MonoBehaviour
         int max = 0;
         int maxf = 0;
         int maxc = 0;
+        
         for (int f = 0; f < large; f++)
         {
             for (int c = 0; c < large; c++)
             {
-                if (intmaze[f, c] == -10)
+                if (multiway || intmaze[f, c] == -10)
                 {
-                    if (playermaze[f,c] > max)
+                    if (playermaze[f, c] > max)
                     {
-                        max = playermaze[f,c];
+                        max = playermaze[f, c];
                         maxf = f;
                         maxc = c;
                     }
                 }
             }
         }
+        
         intmaze[maxf, maxc] = -20;
         ff = maxf;
         fc = maxc;

@@ -38,7 +38,6 @@ public class Traps : MonoBehaviour
         }
         for ( int i = 0; i < numtraps.Count; i++)
         {
-            if (i == 8) Debug.Log("turno del portal rojo");
             for (int f = 1; f < game.large - 1; f++)
             {
                 for (int c = 1; c < game.large - 1; c++)
@@ -55,12 +54,9 @@ public class Traps : MonoBehaviour
                         if (i == 4) logs.Add(t);
                         if (i == 8)
                         {
-                            Debug.Log("entro al if del portal rojo");
                             redportals.Add(t);
-                            Debug.Log("gameobject añadido");
                             int[] pair = {f, c};
                             redportalspos.Add(pair);
-                            Debug.Log("par del portal rojo puesto");
                         } 
                     }
                 }

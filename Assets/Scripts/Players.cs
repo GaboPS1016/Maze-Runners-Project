@@ -368,8 +368,39 @@ namespace Playerspace
             game.chamana.Play();
             int f = (int)player.transform.position.y;
             int c = (int)player.transform.position.x;
-            int[,] playermaze = maze.PlayerMaze(game.ff, game.fc);
-            
+
+            List<int[]> options = new List<int[]>();
+            int[,] playermaze = maze.PlayerMaze(f, c);
+            for (int i = 0; i < game.large; i++)
+            {
+                for (int j = 0; j < game.large; j++)
+                {
+                    if (playermaze[i, j] == 1) options.Add(new int[2] { i, j });
+                }
+            }
+            int n = options.Count;
+            int[,] gemamaze = maze.PlayerMaze(game.ff, game.fc);
+            int[] distances = new int[n];
+            for (int k = 0; k < n; k++)
+            {
+                distances[k] = gemamaze[options[k][0], options[k][1]];
+            }
+            int min = int.MaxValue;
+            List<int> index = new List<int>();
+            for (int l = 0; l < n; l++)
+            {
+                if (distances[l] <= min) min = distances[l];
+            }
+            for (int l = 0; l < n; l++)
+            {
+                if (distances[l] == min) index.Add(l);
+                
+            }
+            for (int i = 0; i < index.Count; i++)
+            {
+                game.chamanamarcs.Add(Instantiate(game.chamanaMarc, new Vector3(options[index[i]][1] + 0.5f, options[index[i]][0] + 0.5f, 1), Quaternion.identity));
+            }
+        
             game.InfoText.text = "Ya sabes por donde ir.";
         }
     }

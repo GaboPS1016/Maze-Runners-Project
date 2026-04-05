@@ -19,6 +19,7 @@ public class Parameters : MonoBehaviour
     public List<int> p;    
     public List<TextMeshProUGUI> infoplayer;
     public int change = 10;
+    public int large;
     public GameObject Players;
     public GameObject x2;
     public GameObject x3;
@@ -30,9 +31,16 @@ public class Parameters : MonoBehaviour
     public GameObject b4;
     public List<TextMeshProUGUI> inftexts;
     public Toggle TogMulticaminos;
+    public Slider slider;
+    public TextMeshProUGUI stringlarge;
     public void OnValueChanged(bool estado)
     {
         multicaminos = estado;
+    }
+    public void OnValueChanged(int num)
+    {
+        large = (int)slider.value;
+        stringlarge.text = Convert.ToString(large);
     }
     public void playerinfo(int num)
     {
@@ -99,6 +107,8 @@ public class Parameters : MonoBehaviour
     {
         playerselect.multicaminos = multicaminos;
         playerselect.p = p;
+        if (large % 2 == 0) large--;
+        playerselect.large = large;
         playerselect.numPlayers = numPlayers;
         GameObject ps = GameObject.Find("PlayerSelect");
         DontDestroyOnLoad(ps);
@@ -107,6 +117,7 @@ public class Parameters : MonoBehaviour
     void Start()
     {
         multicaminos = false;
+        large = 25;
         numPlayers = 1;
         x2 = GameObject.Find("2");
         x3 = GameObject.Find("3");
