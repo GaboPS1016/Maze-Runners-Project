@@ -27,16 +27,16 @@ public class Movement : MonoBehaviour
         playerpos = player.transform.position;
         int fil = (int)playerpos.y;
         int col = (int)playerpos.x;
-        int efil = maze.ff;
-        int ecol = maze.fc;
+        int efil = game.ff;
+        int ecol = game.fc;
         MoveCell.gameObject.SetActive(true);
         List<int[]> posiblemoves = new List<int[]>();
-        playermaze = maze.PlayerMaze(fil,col);
-        intmaze = maze.intmaze;
+        playermaze = maze.PlayerMaze(game.boolmaze, fil,col);
+        intmaze = game.intmaze;
         MoveCell.GetComponent<SpriteRenderer>().enabled = true;
-        for (int f = 0; f < maze.large; f++)
+        for (int f = 0; f < game.large; f++)
         {
-            for (int c = 0; c < maze.large; c++)
+            for (int c = 0; c < game.large; c++)
             {
                 if (playermaze[f,c] == dado && game.intmaze[f,c] != 60) //no se puede caer en una piedra
                 {
@@ -64,6 +64,11 @@ public class Movement : MonoBehaviour
         {
             Destroy(posiblecells[e]);
         }
+        for (int u = 0; u < game.chamanamarcs.Count; u++)
+        {
+            Destroy(game.chamanamarcs[u]);
+        }
+        game.chamanamarcs.Clear();
         int[] selcell = new int[]{fcellselected, ccellselected};       
         List<int[]> way = new List<int[]> {selcell};
         int[] df = { 1, -1, 0, 0 };
@@ -105,7 +110,11 @@ public class Movement : MonoBehaviour
             player.transform.position = nextPosition;
         }        
         playerpos = player.transform.position; 
-        if (game.intmaze[(int)playerpos.y, (int)playerpos.x] != 0 && game.intmaze[(int)playerpos.y, (int)playerpos.x] != 50) game.newdice = false;
+        if (game.intmaze[(int)playerpos.y, (int)playerpos.x] != 0 && game.intmaze[(int)playerpos.y, (int)playerpos.x] != 50 && game.intmaze[(int)playerpos.y, (int)playerpos.x] != -5)
+        {
+            game.newdice = false;
+            game.repeatTurn = false;
+        }
         traps.Penalizations();  
         antilogs = false;     
         if ((int)player.transform.position.y == efil && (int)player.transform.position.x == ecol)

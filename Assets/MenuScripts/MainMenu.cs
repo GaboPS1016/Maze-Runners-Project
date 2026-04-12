@@ -2,7 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using System.IO;
 using UnityEngine.SceneManagement;
+using TMPro;
+using System;
 
 public class MainMenu : MonoBehaviour
 {
@@ -13,6 +16,7 @@ public class MainMenu : MonoBehaviour
     public Image imgmuter;
     public Sprite muteon;
     public Sprite muteoff;
+    public GameObject infoPanel;
     public AudioSource music;
     public bool isMute = false;
     public void Jugar()
@@ -33,19 +37,25 @@ public class MainMenu : MonoBehaviour
         Debug.Log("Saliendo...");
         Application.Quit();
     }
+    public void InfoPanel()
+    {
+        infoPanel.SetActive(true);
+    }
+    public void atrasInfoPanel()
+    {
+        infoPanel.SetActive(false);
+    }
     public void Home()
     {
         home.SetActive(false);
         door.SetActive(true);
         cancel.SetActive(true);
-        muter.SetActive(true);
     }
     public void Cancel()
     {
         home.SetActive(true);
         door.SetActive(false);
         cancel.SetActive(false);
-        muter.SetActive(false);
     }
     public void Mute()
     {
@@ -62,11 +72,11 @@ public class MainMenu : MonoBehaviour
             isMute = true;
         }
     }
+    
     public void Start()
     {
         home.SetActive(true);
         door.SetActive(false);
         cancel.SetActive(false);
-        muter.SetActive(false);
     }
 }

@@ -66,13 +66,12 @@ public class Maze_Generator : MonoBehaviour
             sf = large - 2;
             sc = nswall;
         }
-        intmaze[sf, sc] = -5;                 //casilla de inicio   
-        Debug.Log("entrando a makingways");         
+        intmaze[sf, sc] = -5;                 //casilla de inicio         
         makingWays(sf, sc);
         Puntas(intmaze);
-        PlayerMaze(sf, sc);
-        End();
-        printCells();      
+        playermaze = PlayerMaze(boolmaze,sf, sc);
+        End(playermaze);
+        printCells(intmaze, boolmaze);      
         QuitarPuntas(intmaze);                  
     }    
     public void makingWays(int f, int c)
@@ -95,6 +94,7 @@ public class Maze_Generator : MonoBehaviour
             {
                 if (!boolmaze[movef, movec] || (multiway && Random.Range(0, 100) <= 5))
                 {
+                    if (intmaze[movef, movec] == -5) continue;
                     bool stop = false;
                     if (boolmaze[movef, movec]) stop = true;
                     boolmaze[movef, movec] = true;                                                  //validar camino
@@ -138,14 +138,15 @@ public class Maze_Generator : MonoBehaviour
             }
         }
     }
-    public int[,] PlayerMaze( int sf, int sc)                                //Algoritmo de Lee
+    public int[,] PlayerMaze(bool[,] boolmaze, int sf, int sc)                                //Algoritmo de Lee
     {
-        
+        int l = boolmaze.GetLength(0);
+        int[,] playermaze = new int[l, l];
         int[] df = { 1, -1, 0, 0 };
         int[] dc = { 0, 0, 1, -1 };
-        for (int f = 0; f < large; f++)
+        for (int f = 0; f < l; f++)
         {
-            for (int c = 0; c < large; c++)
+            for (int c = 0; c < l; c++)
             {
                 if (boolmaze[f,c]) playermaze[f,c] = 0;
                 else playermaze[f,c] = -1;                                              
@@ -156,9 +157,9 @@ public class Maze_Generator : MonoBehaviour
         do
         {
             changes = false;
-            for (int f = 0; f < large; f++)
+            for (int f = 0; f < l; f++)
             {
-                for (int c = 0; c < large; c++)
+                for (int c = 0; c < l; c++)
                 {
                     if (playermaze[f,c] == 0 || playermaze[f,c] == -1) continue;
                     for (int dir = 0; dir < 4; dir++)
@@ -179,7 +180,7 @@ public class Maze_Generator : MonoBehaviour
         playermaze[sf,sc] = 0; 
         return playermaze;
     }        
-    public void End()
+    public void End(int[,] playermaze)
     {
         int max = 0;
         int maxf = 0;
@@ -215,32 +216,34 @@ public class Maze_Generator : MonoBehaviour
             }
         }
     }
-    public void printCells()
+    public void printCells(int[,] intmaze, bool[,] boolmaze)
     {
-        for (int m = 0; m<large; m++)
+        int large = intmaze.GetLength(0);
+        for (int m = 0; m < large; m++)
         {
-            for (int n = 0; n<large; n++) 
+            for (int n = 0; n < large; n++)
             {
-                if (intmaze[m,n] == -5) 
+                if (intmaze[m, n] == -5)
                 {
-                    Instantiate(StartCell, new Vector3((float)(0.5+n),(float)(0.5+m),10), Quaternion.identity);
+                    Instantiate(StartCell, new Vector3((float)(0.5 + n), (float)(0.5 + m), 9), Quaternion.identity);
                     continue;
                 }
-                if (intmaze[m,n] == -20) 
+                if (intmaze[m, n] == -20)
                 {
-                    Instantiate(TrueCell, new Vector3((float)(0.5+n),(float)(0.5+m),10), Quaternion.identity);
-                    Instantiate(FinishCell, new Vector3((float)(0.5+n),(float)(0.5+m),9), Quaternion.identity);
+                    Instantiate(TrueCell, new Vector3((float)(0.5 + n), (float)(0.5 + m), 10), Quaternion.identity);
+                    Instantiate(FinishCell, new Vector3((float)(0.5 + n), (float)(0.5 + m), 9), Quaternion.identity);
                     continue;
                 }
-                if (!boolmaze[m,n])
+                if (!boolmaze[m, n])
                 {
-                    Instantiate(FalseCell, new Vector3((float)(0.5+n),(float)(0.5+m),10), Quaternion.identity);
+                    Instantiate(FalseCell, new Vector3((float)(0.5 + n), (float)(0.5 + m), 10), Quaternion.identity);
                 }
                 else
                 {
-                    Instantiate(TrueCell, new Vector3((float)(0.5+n),(float)(0.5+m),10), Quaternion.identity);
-                }                
+                    Instantiate(TrueCell, new Vector3((float)(0.5 + n), (float)(0.5 + m), 10), Quaternion.identity);
+                }
             }
         }
+        
     }
 }

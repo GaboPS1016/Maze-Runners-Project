@@ -28,15 +28,15 @@ public class Traps : MonoBehaviour
     public AudioSource spikesSound;
     public void MakingTraps()
     {
-        
+
         numtraps = new List<int> { 10, 20, 30, 40, 50, 60, 70, 80, 90 };        //LEYENDA:   Sp, F, B, Port, L, R, E, P, RPort 
         spritetraps = new List<GameObject>();
         redportalspos = new List<int[]>();
-        for ( int i = 0; i < numtraps.Count; i++ )
+        for (int i = 0; i < numtraps.Count; i++)
         {
-            spritetraps.Add (TrapsFolder.transform.GetChild(i).gameObject);        //GameObjects de las trampas
+            spritetraps.Add(TrapsFolder.transform.GetChild(i).gameObject);        //GameObjects de las trampas
         }
-        for ( int i = 0; i < numtraps.Count; i++)
+        for (int i = 0; i < numtraps.Count; i++)
         {
             for (int f = 1; f < game.large - 1; f++)
             {
@@ -44,20 +44,49 @@ public class Traps : MonoBehaviour
                 {
                     if (f == game.sf && c == game.sc) continue;
                     int rand = Random.Range(0, 100);
-                    if (game.intmaze[f,c] == 0 && rand <= percent)
+                    if (game.intmaze[f, c] == 0 && rand <= percent)
                     {
-                        game.intmaze[f,c] = numtraps[i];
-                        //if (i == 6) Instantiate(exp, new Vector3(c + 0.5f, f + 0.5f, 4), Quaternion.identity);
-                        
+                        game.intmaze[f, c] = numtraps[i];
+                        //if (i == 7) Instantiate(ven, new Vector3(c + 0.5f, f + 0.5f, 4), Quaternion.identity);
+
                         if (i == 6 || i == 7) continue;
                         GameObject t = Instantiate(spritetraps[i], new Vector3(c + 0.5f, f + 0.5f, 4), Quaternion.identity);
                         if (i == 4) logs.Add(t);
                         if (i == 8)
                         {
                             redportals.Add(t);
-                            int[] pair = {f, c};
+                            int[] pair = { f, c };
                             redportalspos.Add(pair);
-                        } 
+                        }
+                    }
+                }
+            }
+        }
+    }
+    public void OnlyPlaceTraps()
+    {
+        numtraps = new List<int> { 10, 20, 30, 40, 50, 60, 70, 80, 90 };        //LEYENDA:   Sp, F, B, Port, L, R, E, P, RPort 
+        spritetraps = new List<GameObject>();
+        redportalspos = new List<int[]>();
+        for (int i = 0; i < numtraps.Count; i++)
+        {
+            spritetraps.Add(TrapsFolder.transform.GetChild(i).gameObject);        //GameObjects de las trampas
+        }
+        for (int f = 1; f < game.large - 1; f++)
+        {
+            for (int c = 1; c < game.large - 1; c++)
+            {
+                if (game.intmaze[f, c] > 0)
+                {
+                    int value = (game.intmaze[f, c]/10) - 1;
+                    if (value == 6 || value == 7) continue;
+                    GameObject t = Instantiate(spritetraps[value], new Vector3(c + 0.5f, f + 0.5f, 4), Quaternion.identity);
+                    if (value == 4) logs.Add(t);
+                    if (value == 8)
+                    {
+                        redportals.Add(t);
+                        int[] pair = { f, c };
+                        redportalspos.Add(pair);
                     }
                 }
             }
@@ -115,7 +144,7 @@ public class Traps : MonoBehaviour
     public void Fire(int f, int c)
     {
         fireSound.Play();
-        playermaze = maze.PlayerMaze(f, c);
+        playermaze = maze.PlayerMaze(game.boolmaze, f, c);
         game.playersInfo[game.iactual].player.GetComponent<SpriteRenderer>().color = Color.black;
         game.playersInfo[game.iactual].burning = 3;
         for (int fil = 1; fil < game.large - 2; fil++)
@@ -124,21 +153,16 @@ public class Traps : MonoBehaviour
             {
                 if (game.intmaze[fil, col] != 60)       //no rocas
                 {
-                    int n = 3;
-                    while(n > 0)
+                    if (playermaze[fil, col] <= 2 && playermaze[fil, col] != -1 && Random.Range(0,100) >= 60)
                     {
-                        if (playermaze[fil, col] == n && Random.Range(0,100) >= 85)
-                        {
-                            game.players[game.iactual].transform.position = new Vector3(col + 0.5f, fil + 0.5f, 1);
-                            Penalizations();
-                            return;
-                        }
-                        n--;
+                        game.players[game.iactual].transform.position = new Vector3(col + 0.5f, fil + 0.5f, 1);
+                        Penalizations();
+                        return;
                     }
                 }
             }
         }
-
+        
     }
     public void BearTrap()
     {
@@ -167,7 +191,7 @@ public class Traps : MonoBehaviour
     {
         int f = dadf;          
         int c = dadc;        
-        playermaze = maze.PlayerMaze(pf, pc);
+        playermaze = maze.PlayerMaze(game.boolmaze, pf, pc);
         int[] df = { 1, -1, 0, 0 };
         int[] dc = { 0, 0, 1, -1 };
         int num = dado;
@@ -243,7 +267,7 @@ public class Traps : MonoBehaviour
     {
 
         List<int> afected = new List<int>();
-        playermaze = maze.PlayerMaze(f, c);
+        playermaze = maze.PlayerMaze(game.boolmaze, f, c);
         for (int fil = 1; fil < game.large - 1; fil++)
         {
             for (int col = 1; col < game.large - 1; col++)
@@ -274,7 +298,7 @@ public class Traps : MonoBehaviour
     }
     public IEnumerator Poison(int f, int c)
     {
-        playermaze = maze.PlayerMaze(f, c);
+        playermaze = maze.PlayerMaze(game.boolmaze, f, c);
         for (int fil = 1; fil < game.large - 1; fil++)
         {
             for (int col = 1; col < game.large - 1; col++)
@@ -284,8 +308,9 @@ public class Traps : MonoBehaviour
                     for (int i = 0; i < game.numPlayers; i++)
                     {
                         GameObject currentPlayer = game.players[i];
-                        if ((int)currentPlayer.transform.position.y == fil && (int)currentPlayer.transform.position.x == col) 
+                        if ((int)currentPlayer.transform.position.y == fil && (int)currentPlayer.transform.position.x == col)
                         {
+                            if (game.p[i] == 0) continue;
                             game.playersInfo[i].timeToSpecial += 3;
                         }
                     }
@@ -294,7 +319,12 @@ public class Traps : MonoBehaviour
         }
         poiSound.Play();
         GameObject poisonAnim = Instantiate(spritetraps[7], new Vector3(c + 0.5f, f + 0.5f, 4), Quaternion.identity);
-        game.InfoText.text = "Veneno!!, tu habilidad especial y la de jugadores cercanos demorará en cargarse 3 turnos más";
+        if (game.p[game.iactual] == 0)
+        {   
+            game.InfoText.text = "Veneno!!, juegas de nuevo";
+            game.repeatTurn = true;
+        } 
+        else game.InfoText.text = "Veneno!!, tu habilidad especial y la de jugadores cercanos demorará en cargarse 3 turnos más";
         yield return new WaitForSeconds(3.2f);          //tiempo de la animacion
         Destroy (poisonAnim);
         game.intmaze[f, c] = 0;      

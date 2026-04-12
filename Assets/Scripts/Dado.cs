@@ -23,10 +23,11 @@ public class Dado : MonoBehaviour
         int value = 1;
         for (int i = 0; i < 10; i++)                                    //Animacion de 10 Valores aleatorios para simular el lanzamiento
         {
-            value = Random.Range(0,6);
-            dado.GetComponent<Image>().sprite = diceFaces[value];            
+            value = Random.Range(0, 6);
+            dado.GetComponent<Image>().sprite = diceFaces[value];
             yield return new WaitForSeconds(0.1f);
         }
+        if (game.playersInfo[game.iactual].damaged) dado.GetComponent<Image>().sprite = diceFaces[0];
         game.diceResult = value + 1;
         game.diceThrown = true;
     }

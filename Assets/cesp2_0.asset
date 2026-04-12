@@ -10,10 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 13312, guid: 0000000000000000e000000000000000, type: 0}
-  m_Name: cesped_0
+  m_Name: cesp2_0
   m_EditorClassIdentifier: 
-  m_Sprite: {fileID: 8083079555343073661, guid: 86a7497fab082d74aba4b06e598ba5e8, type: 3}
-  m_Color: {r: 0.37647063, g: 0.5254902, b: 0.15294118, a: 1}
+  m_Sprite: {fileID: 1197235459162903389, guid: 17aafbcbe9044c24ca0ba21c9ddf4096, type: 3}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_Transform:
     e00: 1
     e01: 0

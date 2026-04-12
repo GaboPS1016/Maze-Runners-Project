@@ -19,13 +19,13 @@ public class Game : MonoBehaviour
     public Players[] playersInfo;
     public Maze_Generator maze;
     public bool multiway;
+    public bool loaded;
     public int numPlayers;
     public List<GameObject> players;   
     public List<int> p;
     public GameObject pHolder;
     public List<GameObject> chamanamarcs;
     public GameObject chamanaMarc;
-
     public int sf;
     public int sc;
     public int ff;
@@ -57,6 +57,7 @@ public class Game : MonoBehaviour
     public AudioSource fumador;
     public AudioSource asesino;
     public AudioSource chamana;
+    public AudioSource aplausos;
     public void SpawnPlayers()
     {
         for (int i = 0; i < numPlayers; i++)
@@ -68,10 +69,18 @@ public class Game : MonoBehaviour
     }
     public IEnumerator turns()
     {
+        bool firstcicle = true;
         while (!gameFinished)
         {
             for (int i = 0; i < numPlayers; i++)
             {
+                if (firstcicle)
+                {
+                    firstcicle = false;                    
+                    i = iactual - 1;
+                    continue;
+                }
+
                 playerTurnText.text = "Jugador "+ (i+1);
                 cameracontrol.player = players[i];
                 movement.player = players[i];
@@ -112,11 +121,7 @@ public class Game : MonoBehaviour
                 if (playersInfo[i].timeToSpecial == 0) abilityAvaiable = true;
                 movement.timetomove = true;
                 yield return new WaitUntil(() => playerMoved);
-                for (int u = 0; u < chamanamarcs.Count; u++)
-                {
-                    Destroy(chamanamarcs[u]);
-                }
-                chamanamarcs.Clear();
+                
                 abilityAvaiable = false;
                 playerMoved = false;
                 if (repeatTurn)
@@ -131,6 +136,7 @@ public class Game : MonoBehaviour
                 inmunity = false;
                 if (gameFinished)                                                       //Juego terminado
                 {
+                    aplausos.Play();
                     VictoryText.gameObject.SetActive(true);
                     VictoryText.text = "GANASTE JUGADOR " + (i+1);
                     endButton.gameObject.SetActive(true);
@@ -151,24 +157,46 @@ public class Game : MonoBehaviour
             playersInfo[iactual].timeToSpecial = playersInfo[iactual].rechargeTime;
         }
     }
-    
+
     void Start()
     {
+        loaded = false;
         endButton.gameObject.SetActive(false);
         pHolder = GameObject.Find("PlayerSelect");
-        large = PlayerSelect.Instance.large;
-        multiway = PlayerSelect.Instance.multicaminos;
-        maze.Maze(large);
-        intmaze = maze.intmaze;
-        boolmaze = maze.boolmaze;
-        sf = maze.sf;
-        sc = maze.sc;
-        ff = maze.ff;
-        fc = maze.fc;
-        traps.MakingTraps();
-        numPlayers = PlayerSelect.Instance.numPlayers;
-        p = PlayerSelect.Instance.p;
-
+        GameObject datos = GameObject.Find("datos");
+        if (pHolder == null)
+        {
+            loaded = true;
+            intmaze = DatosCarga.Instance.intmaze;
+            boolmaze = DatosCarga.Instance.boolmaze;
+            numPlayers = DatosCarga.Instance.numplayers;
+            p = DatosCarga.Instance.p;
+            large = intmaze.GetLength(0);
+            sf = DatosCarga.Instance.start[0];
+            sc = DatosCarga.Instance.start[1];
+            ff = DatosCarga.Instance.gema[0];
+            fc = DatosCarga.Instance.gema[1];
+            maze.printCells(intmaze, boolmaze);
+            traps.OnlyPlaceTraps();
+            iactual = DatosCarga.Instance.iactual;
+        }
+        else
+        {
+            if (datos != null) Destroy(datos);
+            large = PlayerSelect.Instance.large;
+            multiway = PlayerSelect.Instance.multicaminos;
+            numPlayers = PlayerSelect.Instance.numPlayers;
+            p = PlayerSelect.Instance.p;
+            maze.Maze(large);
+            intmaze = maze.intmaze;
+            boolmaze = maze.boolmaze;
+            sf = maze.sf;
+            sc = maze.sc;
+            ff = maze.ff;
+            fc = maze.fc;
+            traps.MakingTraps();
+            iactual = 0;
+        }
         players = new List<GameObject>();
         for (int i = 0; i < p.Count; i++)
         {
@@ -247,16 +275,43 @@ public class Game : MonoBehaviour
                 chamana.Initialize(this, selectmovecell, maze, movement, Players);
                 chamana.player = players[i];
                 playersInfo[i] = chamana;
-            }          
+            }
         }
-        startGame = true;      
+        startGame = true;  
     }
     void FixedUpdate()
     {
-        if (startGame) 
+        if (startGame)
         {
-            SpawnPlayers();
             startGame = false;
+            if (loaded)
+            {
+                List<int> timetospe = DatosCarga.Instance.timetospecial;
+                List<int> sleep = DatosCarga.Instance.sleeptime;
+                List<int> burn = DatosCarga.Instance.burning;
+                List<bool> dams = DatosCarga.Instance.damageds;
+
+                for (int i = 0; i < numPlayers; i++)
+                {
+                    players[i].GetComponent<SpriteRenderer>().enabled = true;
+
+                    playersInfo[i].timeToSpecial = timetospe[i];
+                    playersInfo[i].sleepTime = sleep[i];
+                    playersInfo[i].burning = burn[i];
+                    if (burn[i] > 0) playersInfo[i].player.GetComponent<SpriteRenderer>().color = Color.black;
+                    playersInfo[i].damaged = dams[i];
+                }
+                List<Vector3> vectors = DatosCarga.Instance.positions;
+                for (int j = 0; j < numPlayers; j++)
+                {
+                    float x = vectors[j].x;
+                    float y = vectors[j].y;
+                    float z = vectors[j].z;
+                    players[j].transform.position = new Vector3(x, y, z);
+                }   
+            }
+            else SpawnPlayers();
+            loaded = false;
             gamming = true;
         }        
         if (gamming)

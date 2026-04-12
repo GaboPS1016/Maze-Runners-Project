@@ -57,7 +57,7 @@ namespace Playerspace
             game.fumador.Play();
             int f = (int)player.transform.position.y;
             int c = (int)player.transform.position.x;
-            int[,] playermaze = maze.PlayerMaze(f, c);
+            int[,] playermaze = maze.PlayerMaze(game.boolmaze, f, c);
             List<int> playersAffected = new List<int>();
 
             for (int i = 0; i < game.numPlayers; i++)
@@ -67,7 +67,7 @@ namespace Playerspace
                 int playerf = (int)game.players[i].transform.position.y;
                 int playerc = (int)game.players[i].transform.position.x;
             
-                if (playermaze[playerf, playerc] <= 5)
+                if (playermaze[playerf, playerc] <= 7)
                 {
                     playersAffected.Add(i);
                     game.playersInfo[i].timeToSpecial += 3;
@@ -190,7 +190,7 @@ namespace Playerspace
     }
     public class Mercenario : Players
     {    
-        public Mercenario() : base(0,3) 
+        public Mercenario() : base(0,2) 
         {
             timeToSpecial = rechargeTime;
             Ability = "No recibirá la penalización de la trampa en la que caiga.";
@@ -214,7 +214,7 @@ namespace Playerspace
         public Skater() : base(0,5) 
         {
             timeToSpecial = rechargeTime;
-            Ability = "Puede moverse hasta 6 casillas en cualquier dirección válida, incluso saltar troncos.";
+            Ability = "Puede moverse 6 casillas en cualquier dirección válida, incluso saltar troncos.";
         }
         public void Initialize(Game gameInstance, selectmovecell selectInstance, Maze_Generator mazeInstance, Movement moveInstance, GameObject playersFolder)
         {
@@ -298,7 +298,7 @@ namespace Playerspace
             game.trovador.Play();
             int f = (int)player.transform.position.y;
             int c = (int)player.transform.position.x;
-            int[,] playermaze = maze.PlayerMaze(f, c);
+            int[,] playermaze = maze.PlayerMaze(game.boolmaze, f, c);
 
             for (int i = 0; i < game.numPlayers; i++)
             {
@@ -307,7 +307,7 @@ namespace Playerspace
                 int playerf = (int)game.players[i].transform.position.y;
                 int playerc = (int)game.players[i].transform.position.x;
             
-                if (playermaze[playerf, playerc] <= 5)
+                if (playermaze[playerf, playerc] <= 7)
                 {
                     game.playersInfo[i].sleepTime += 3;
                 }
@@ -317,7 +317,7 @@ namespace Playerspace
     }
     public class Asesino : Players
     {    
-        public Asesino() : base(0,8) 
+        public Asesino() : base(0,7) 
         {
             timeToSpecial = rechargeTime;
             Ability = "Manda a los jugadores a tu lado, al inicio.";
@@ -333,7 +333,7 @@ namespace Playerspace
             game.asesino.Play();
             int f = (int)player.transform.position.y;
             int c = (int)player.transform.position.x;
-            int[,] playermaze = maze.PlayerMaze(f, c);
+            int[,] playermaze = maze.PlayerMaze(game.boolmaze, f, c);
 
             for (int i = 0; i < game.numPlayers; i++)
             {
@@ -342,7 +342,7 @@ namespace Playerspace
                 int playerf = (int)game.players[i].transform.position.y;
                 int playerc = (int)game.players[i].transform.position.x;
 
-                if (playermaze[playerf, playerc] <= 1)
+                if (playermaze[playerf, playerc] <= 3)
                 {
                     game.players[i].transform.position = new Vector3(game.sc + 0.5f, game.sf + 0.5f, 1);
                 }
@@ -370,7 +370,7 @@ namespace Playerspace
             int c = (int)player.transform.position.x;
 
             List<int[]> options = new List<int[]>();
-            int[,] playermaze = maze.PlayerMaze(f, c);
+            int[,] playermaze = maze.PlayerMaze(game.boolmaze, f, c);
             for (int i = 0; i < game.large; i++)
             {
                 for (int j = 0; j < game.large; j++)
@@ -379,7 +379,7 @@ namespace Playerspace
                 }
             }
             int n = options.Count;
-            int[,] gemamaze = maze.PlayerMaze(game.ff, game.fc);
+            int[,] gemamaze = maze.PlayerMaze(game.boolmaze, game.ff, game.fc);
             int[] distances = new int[n];
             for (int k = 0; k < n; k++)
             {

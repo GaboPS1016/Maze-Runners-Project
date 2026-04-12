@@ -21,15 +21,15 @@ public class Pdescription : MonoBehaviour
         string s9 = "Chamana                Es capaz de orientarse con su magia de la naturaleza, era líder de una tribu.";
         pStrings = new List<string> { s0, s1, s2, s3, s4, s5, s6, s7, s8, s9 };
         
-        string i0 = "TR 2. Hace que los jugadores a 5 casillas no pueden usar su habilidad por 3 turnos más. Juega doble en los venenos";
+        string i0 = "TR 2. Hace que los jugadores a 7 casillas no pueden usar su habilidad por 3 turnos más. Juega doble en los venenos";
         string i1 = "TR 3. Avanzará la casilla y volverá a jugar, avanzando lo mismo de nuevo.";
         string i2 = "TR 5. Aturde por 3 turnos a los jugadores que se encuentren en su fila o columna actual.";
         string i3 = "TR 7. Desaparece y aparece en la posición de un jugador aleatorio.";
-        string i4 = "TR 3. No recibirá la penalización si cae en una trampa en ese turno.";
+        string i4 = "TR 2. No recibirá la penalización si cae en una trampa en ese turno.";
         string i5 = "TR 5. Puede moverse 6 casillas en cualquier dirección válida, incluso saltar troncos.";
         string i6 = "TR 6. Se teletransporta a una posición segura aleatoria.";
-        string i7 = "TR 4. Hace que los jugadores a 5 casillas se duerman por 4 turnos.";
-        string i8 = "TR 8. Manda a los jugadores a 1 casilla, al inicio.";
+        string i7 = "TR 4. Hace que los jugadores a 7 casillas se duerman por 4 turnos.";
+        string i8 = "TR 7. Manda al inicio a los jugadores a 3 casillas.";
         string i9 = "TR 2. Te indica el camino más rápido a la gema.";
         infStrings = new List<string> { i0, i1, i2, i3, i4, i5, i6, i7, i8, i9 };
     }
