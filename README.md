@@ -1,38 +1,101 @@
-# Maze-Runners-Project
- La Gema de la Fortuna
- Mi Primer Proyecto de Programacion
- Gabriel Pérez Suárez C112
- Creado Con Unity 2023.2.20f1
- Para ejecutar el proyecto solo debe entrar a la escena 0 (MainMenu) y presionar el boton de play.
- También puede ejecutarlo desde las escenas 1 o 2, pero no de la 3 (Maze), ya que no tendrá los jugadores asignados, y el código no funcionará.
- La escena 1 es la Información del juego, ahí se explica la temática.
- En la escena 2 se elige el número de jugadores, y se asignan los jugadores.
- La escena 3 es el laberinto, y es donde se juega. Es la que utiliza la mayoría de los scripts.
- Para descargar el ejecutable debe descomprimir los 6 archivos Maze Runners.rar a la vez, y abrir Gema de la Fortuna.exe.
+# 🎲 Maze Runners: La Gema de la Fortuna
 
- Expliación de los scripts principales:
-  1. MazeGenerator.cs: Genera el laberinto a partir de una matriz de booleanos y una matriz de enteros, en este se implementa el método PlayerMaze(f,c), que mediante el algoritmo de Lee genera una matriz de enteros enumerando a cuantos pasos queda cada casilla desde una determinadda posición.
-  2. Game.cs: Es el que organiza todo el juego y gestiona el sistema de turnos.
-  3. Movement.cs: Es el que gestiona el movimiento de los jugadores. Este dado el valor del dado imprime las casillas a las que te puedes mover y ordena al script selectmovecell.cs a seleccionar la casilla, luego genera el camino que debe seguir el jugador.
-  4. Players.cs: Es el que contiene la información de cada tipo de jugador, las clases de cada uno, incluyendo sus habilidades especiales.
-  5. Traps.cs: Es el que gestiona las trampas, las genera y aplica sus efectos al jugador correspondiente.
-    
-    Trampas:
-     1. Pinchos: La próxima jugada del jugador será de una casilla.
-     2. Fuego: El jugador se pone negro y se puede trasladar a una casilla cercana, recibiendo su efecto si es otra trampa.
-     3. Trampa para osos: El jugador esperará 2 turnos.
-     4. Explosión: Envía al jugador que la activa y a los cercanos a la casilla inicial.
-     5. Veneno: Le suma 2 turnos de recarga a la habilidad especial del jugador que la activa, y a los cercanos.
-    
-    Obstáculos:
-     6. Piedra: La casilla se vuelve inaccesible. No se imprimirá la casilla de selección. No se puede caer en la casilla de una piedra, pero sí se puede caer después de ella. Se puede decir que es el inverso del tronco.
-     7. Tronco: Si el valr del dado es más lejano al tronco, no se imprimirá la casilla de selección, pero sí se puede caer en la casilla de un tronco, talándolo y haciendo el camino accesible. Se puede decir que es el inverso de la piedra.
-    
-    Portales:
-    8. Portal: El jugador se teletransportará a una casilla aleatoria que no tendrá trampas.
- 
- Las características de los jugadores se muestran en Players.cs y en Pdescription.cs.
- Espero que mi proyecto sea de su agrado.
- Para más información, abrir "Informe".
- Que lo disfrute.
+**Un videojuego de tablero y laberinto donde la suerte, la estrategia y las trampas decidirán quién se lleva la legendaria Gema de la Fortuna.**
 
+---
+
+## ✨ ¿Qué es Maze Runners?
+
+Imagina que viajas en el tiempo hasta el año 2025 a.C., llegas a una isla perdida en el Pacífico, y frente a ti se alza un laberinto de muros resbaladizos y altura imposible. Dentro te esperan trampas mortales, portales misteriosos, obstáculos cambiantes… y otros cazatesoros con las mismas ganas que tú de conseguir la Gema.
+
+**Maze Runners** es un juego por turnos para **1 a 4 jugadores** donde cada partida es única: el laberinto se genera aleatoriamente, las trampas se distribuyen sin previo aviso, y tus decisiones (y la cara del dado) determinarán si celebras o terminas en la casilla de inicio.
+
+---
+
+## 🎮 Características principales
+
+### 🧱 Laberintos dinámicos
+
+- Tamaño del laberinto **ajustable** (clásico 25x25 o el que prefieras).
+- Generación recursiva aleatoria: la Gema siempre estará en el camino **más largo**.
+- **Nuevo modo "Multicaminos"**: ahora puedes llegar a la Gema por varias rutas diferentes. ¡Explora y elige la que más te convenga!
+
+### 🎲 Jugabilidad por turnos
+
+- Lanza el dado, elige entre las casillas azules a la distancia indicada… y reza para no caer en una trampa.
+- **Guarda y carga** tu partida en cualquier momento.
+
+### 🔥 Trampas y portales (¡8 tipos!)
+
+| Trampa | Efecto |
+|--------|--------|
+
+| Pinchos | Tu próxima jugada será de solo 1 casilla |
+| Fuego | Te vuelves negro y te mueves a una casilla cercana (con posible trampa) |
+| Trampa para osos | Pierdes 2 turnos |
+| Explosión | Tú y los jugadores cercanos vuelven a la casilla inicial |
+| Veneno | +3 turnos de recarga para tu habilidad especial (y a los cercanos) |
+| Piedra | Bloquea la casilla pero puedes pasarle por encima(no se puede caer ahí) |
+| Tronco | No puedes pasar por encima, si caes en él, lo talas y abres el camino |
+| Portal azul | Teletransporta a una casilla aleatoria sin trampas |
+
+### 🔴 ¡Nuevo! Portal rojo
+
+> Un portal especial que **te conecta con otro portal rojo** del mapa. Entras por uno, sales por otro. ¡Perfecto para aparecer donde menos te esperan!
+
+---
+
+## 🧙 Personajes y habilidades especiales
+
+El juego incluye **10 personajes únicos** (¡sí, dos nuevos!). Cada uno tiene una habilidad especial con su propio tiempo de recarga (TR). **No se pueden repetir personajes** en la misma partida.
+
+| # | Personaje | Habilidad especial | TR |
+|---|-----------|--------------------|----|
+
+| 1 | Fumador | Asquea a jugadores cercanos: no pueden usar su habilidad por 3 turnos | 2 |
+| 2 | Misterioso | Avanza y vuelve a jugar, moviéndose la misma distancia | 3 |
+| 3 | Bateador | Aturde a jugadores en su misma fila y columna | 4 |
+| 4 | Maga | Desaparece y aparece en la posición de otro jugador aleatorio | 5 |
+| 5 | Mercenario | No recibe penalización por la trampa en la que cae | 4 |
+| 6 | Skater | Se mueve hasta 6 casillas en cualquier dirección válida (salta troncos) | 5 |
+| 7 | Cyborg | Teletransporte a una posición segura aleatoria | 5 |
+| 8 | Trovador | Duerme a jugadores cercanos por 3 turnos | 4 |
+| 9 | **Asesino** (nuevo) | Envía al inicio a todos los jugadores en un radio de 3 casillas | 7 |
+| 10 | **Chamana** (nueva) | Te indica el camino más rápido hacia la Gema | 2 |
+
+> *"Asesino disfruta ver sufrir a los demás. Chamana era líder de una tribu y se orienta con magia natural."*
+
+---
+
+## 🖥️ Controles y vista
+
+- Solo necesitas **mouse**. Nada de reflejos, todo es calma y decisión.
+- El jugador actual siempre está **centrado en la pantalla**, viendo 6 casillas a la redonda (justo lo que necesitas).
+- Botones: **Dado** (lanza y muestra opciones) y **Habilidad Especial** (disponible tras lanzar el dado, antes de moverte).
+
+---
+
+## 📦 Requisitos e instalación
+
+- Desarrollado con **Unity 2023.2.20f1**
+- Descarga las **6 partes de Maze Runners.rar** desde el repositorio y descomprímelas a la vez.
+- Para revisar el proyecto en Unity, clona el repositorio y abre la escena `MainMenu`.
+
+🔗 **Repositorio:** [https://github.com/GaboPS1016/Maze-Runners-Project](https://github.com/GaboPS1016/Maze-Runners-Project)
+
+---
+
+## 🧡 Únete al canal de Telegram
+
+¿Quieres estar al día de novedades, partidas comunitarias y secretos del laberinto?
+
+👉 **Muy pronto:** Canal oficial de Telegram *Maze Runners – La Gema de la Fortuna*
+
+*Allí compartiremos partidas guardadas, trucos, y quién sabe… quizás el mapa más rápido hacia la Gema.*
+
+---
+
+> *"Espero que mi proyecto sea de su agrado. Que lo disfrute."*  
+> — **Gabriel Pérez Suárez | C112**
+
+---
