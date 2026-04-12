@@ -76,7 +76,7 @@ El juego incluye **10 personajes únicos** (¡sí, dos nuevos!). Cada uno tiene 
 ## 📦 Requisitos e instalación
 
 - Desarrollado con **Unity 6**
-- Descarga las **Maze Runners v2.0.rar** desde el repositorio y descomprímelo y abre el ejecutable.
+- Descarga las **Maze Runners v2.0.rar** desde el repositorio, descomprímelo y abre el ejecutable.
 - Para revisar el proyecto en Unity, clona el repositorio y abre la escena `MainMenu`.
 
 🔗 **Repositorio:** [https://github.com/GaboPS1016/Maze-Runners-Project](https://github.com/GaboPS1016/Maze-Runners-Project)
@@ -90,6 +90,7 @@ El juego incluye **10 personajes únicos** (¡sí, dos nuevos!). Cada uno tiene 
 👉 **Muy pronto:** Canal oficial de Telegram *Gema de la Fortuna*
 
 *Allí compartiremos partidas guardadas, trucos, y quién sabe… quizás el mapa más rápido hacia la Gema.*
+
 🔗 **Canal:** [https://t.me/GemaDeLaFortuna](https://t.me/GemaDeLaFortuna)
 
 ---
