@@ -29,7 +29,6 @@ Imagina que viajas en el tiempo hasta el año 2025 a.C., llegas a una isla perdi
 
 | Trampa | Efecto |
 |--------|--------|
-
 | Pinchos | Tu próxima jugada será de solo 1 casilla |
 | Fuego | Te vuelves negro y te mueves a una casilla cercana (con posible trampa) |
 | Trampa para osos | Pierdes 2 turnos |
@@ -51,7 +50,6 @@ El juego incluye **10 personajes únicos** (¡sí, dos nuevos!). Cada uno tiene 
 
 | # | Personaje | Habilidad especial | TR |
 |---|-----------|--------------------|----|
-
 | 1 | Fumador | Asquea a jugadores cercanos: no pueden usar su habilidad por 3 turnos | 2 |
 | 2 | Misterioso | Avanza y vuelve a jugar, moviéndose la misma distancia | 3 |
 | 3 | Bateador | Aturde a jugadores en su misma fila y columna | 4 |
@@ -77,8 +75,8 @@ El juego incluye **10 personajes únicos** (¡sí, dos nuevos!). Cada uno tiene 
 
 ## 📦 Requisitos e instalación
 
-- Desarrollado con **Unity 2023.2.20f1**
-- Descarga las **6 partes de Maze Runners.rar** desde el repositorio y descomprímelas a la vez.
+- Desarrollado con **Unity 6**
+- Descarga las **Maze Runners v2.0.rar** desde el repositorio y descomprímelo y abre el ejecutable.
 - Para revisar el proyecto en Unity, clona el repositorio y abre la escena `MainMenu`.
 
 🔗 **Repositorio:** [https://github.com/GaboPS1016/Maze-Runners-Project](https://github.com/GaboPS1016/Maze-Runners-Project)
@@ -89,9 +87,10 @@ El juego incluye **10 personajes únicos** (¡sí, dos nuevos!). Cada uno tiene 
 
 ¿Quieres estar al día de novedades, partidas comunitarias y secretos del laberinto?
 
-👉 **Muy pronto:** Canal oficial de Telegram *Maze Runners – La Gema de la Fortuna*
+👉 **Muy pronto:** Canal oficial de Telegram *Gema de la Fortuna*
 
 *Allí compartiremos partidas guardadas, trucos, y quién sabe… quizás el mapa más rápido hacia la Gema.*
+🔗 **Canal:** [https://t.me/GemaDeLaFortuna](https://t.me/GemaDeLaFortuna)
 
 ---
 
