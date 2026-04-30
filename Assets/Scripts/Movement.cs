@@ -31,26 +31,35 @@ public class Movement : MonoBehaviour
         int ecol = game.fc;
         MoveCell.gameObject.SetActive(true);
         List<int[]> posiblemoves = new List<int[]>();
-        playermaze = maze.PlayerMaze(game.boolmaze, fil,col);
+        playermaze = maze.PlayerMaze(game.boolmaze, fil, col);
         intmaze = game.intmaze;
         MoveCell.GetComponent<SpriteRenderer>().enabled = true;
+        /*
         for (int f = 0; f < game.large; f++)
         {
             for (int c = 0; c < game.large; c++)
             {
-                if (playermaze[f,c] == dado && game.intmaze[f,c] != 60) //no se puede caer en una piedra
+                if (playermaze[f, c] == dado && game.intmaze[f, c] != 60) //no se puede caer en una piedra
                 {
-                    if(traps.TestingLog(fil, col, f, c, dado) && !antilogs)              //no se puede pasar por despues de un tronco  
-                    {      
+                    if (traps.TestingLog(fil, col, f, c, dado) && !antilogs)              //no se puede pasar por despues de un tronco  
+                    {
                         continue;
-                    }           
-                    posiblemoves.Add(new int[] {f,c});                                  //casillas azules a las que se puede mover con el valor del dado                     
-                    GameObject MoveCellClone = Instantiate(MoveCell, new Vector3((float)(0.5+c),(float)(0.5+f),5), Quaternion.identity);
+                    }
+                    posiblemoves.Add(new int[] { f, c });                                  //casillas azules a las que se puede mover con el valor del dado                     
+                    GameObject MoveCellClone = Instantiate(MoveCell, new Vector3((float)(0.5 + c), (float)(0.5 + f), 5), Quaternion.identity);
                     posiblecells.Add(MoveCellClone);
                 }
             }
+        }*/
+        MoveRecursive(fil, col, dado, -1, posiblemoves);
+        foreach (int[] move in posiblemoves)
+        {
+            int f = move[0];
+            int c = move[1];
+            GameObject MoveCellClone = Instantiate(MoveCell, new Vector3((float)(0.5 + c), (float)(0.5 + f), 5), Quaternion.identity);
+            posiblecells.Add(MoveCellClone);
         }
-        if (posiblemoves.Count == 0) 
+        if (posiblemoves.Count == 0)
         {
             game.InfoText.text = "No tienes movimientos disponibles";
             game.playerMoved = true;
@@ -69,8 +78,8 @@ public class Movement : MonoBehaviour
             Destroy(game.chamanamarcs[u]);
         }
         game.chamanamarcs.Clear();
-        int[] selcell = new int[]{fcellselected, ccellselected};       
-        List<int[]> way = new List<int[]> {selcell};
+        int[] selcell = new int[] { fcellselected, ccellselected };
+        List<int[]> way = new List<int[]> { selcell };
         int[] df = { 1, -1, 0, 0 };
         int[] dc = { 0, 0, 1, -1 };
         int num = dado;
@@ -82,7 +91,7 @@ public class Movement : MonoBehaviour
                 int newc = ccellselected + dc[dir];
                 if (playermaze[newf, newc] == num - 1)
                 {
-                    way.Add(new int[] {newf, newc});           //Creando el camino de atras para alante
+                    way.Add(new int[] { newf, newc });           //Creando el camino de atras para alante
                     fcellselected = newf;
                     ccellselected = newc;
                     break;
@@ -98,7 +107,7 @@ public class Movement : MonoBehaviour
             int f = x[0];
             int c = x[1];
             fil = f;
-            col = c;            
+            col = c;
             float playerspeed = 5f;
             Vector3 nextPosition = new Vector3(c + 0.5f, f + 0.5f, 1f);
 
@@ -108,21 +117,49 @@ public class Movement : MonoBehaviour
                 yield return null;
             }
             player.transform.position = nextPosition;
-        }        
-        playerpos = player.transform.position; 
+        }
+        playerpos = player.transform.position;
         if (game.intmaze[(int)playerpos.y, (int)playerpos.x] != 0 && game.intmaze[(int)playerpos.y, (int)playerpos.x] != 50 && game.intmaze[(int)playerpos.y, (int)playerpos.x] != -5)
         {
             game.newdice = false;
             game.repeatTurn = false;
         }
-        traps.Penalizations();  
-        antilogs = false;     
+        traps.Penalizations();
+        antilogs = false;
         if ((int)player.transform.position.y == efil && (int)player.transform.position.x == ecol)
         {
             game.gameFinished = true;
             game.InfoText.text = "Encontraste la Gema de la Fortuna";
-        }    
+        }
         game.playerMoved = true;
+    }
+    void MoveRecursive(int fil, int col, int num,int lastdirection, List<int[]> moves)
+    {
+        if (num == 0)
+        {
+            if (game.intmaze[fil, col] == 60) return; // No se puede pasar por una piedra
+            if (!IsInList(moves, new int[] { fil, col })) moves.Add(new int[] { fil, col });
+            return;
+        }
+        
+        if (game.intmaze[fil, col] == 50 && !antilogs) return; // No se puede pasar por un tronco si no es el último movimiento   
+        int[] df = { 1, 0, -1, 0 };
+        int[] dc = { 0, 1, 0, -1 };
+        for (int dir = 0; dir < 4; dir++)
+        {
+            if (dir == lastdirection) continue; // Evitar volver en la dirección opuesta
+            int newf = fil + df[dir];
+            int newc = col + dc[dir];
+            if (game.boolmaze[newf, newc]) MoveRecursive(newf, newc, num - 1, (dir + 2) % 4, moves);
+        }
+    }
+    bool IsInList(List<int[]> list, int[] item)
+    {
+        foreach (int[] element in list)
+        {
+            if (element[0] == item[0] && element[1] == item[1]) return true;
+        }
+        return false;
     }
     void FixedUpdate()
     {
